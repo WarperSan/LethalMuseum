@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LethalMuseum", "LethalMuseum\LethalMuseum.csproj", "{3EBA0B43-08CB-4F3E-923F-029319535528}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EBA0B43-08CB-4F3E-923F-029319535528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBA0B43-08CB-4F3E-923F-029319535528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBA0B43-08CB-4F3E-923F-029319535528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBA0B43-08CB-4F3E-923F-029319535528}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
