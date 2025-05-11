@@ -1,47 +1,42 @@
 using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
-using LobbyCompatibility.Attributes;
-using LobbyCompatibility.Enums;
+using LethalMuseum.Helpers;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LethalMuseum;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-[BepInDependency("BMX.LobbyCompatibility", BepInDependency.DependencyFlags.HardDependency)]
-[LobbyCompatibility(CompatibilityLevel.ClientOnly, VersionStrictness.None)]
 public class LethalMuseum : BaseUnityPlugin
 {
-    public static LethalMuseum Instance { get; private set; } = null!;
-    internal new static ManualLogSource Logger { get; private set; } = null!;
-    internal static Harmony? Harmony { get; set; }
-
     private void Awake()
     {
-        Logger = base.Logger;
-        Instance = this;
+        Helpers.Logger.SetLogger(Logger);
+        
+        if (!Bundle.LoadBundle("lm-bundle"))
+            return;
+        
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
-        Patch();
-
-        Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+        Helpers.Logger.Info($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
-    internal static void Patch()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Harmony ??= new Harmony(MyPluginInfo.PLUGIN_GUID);
+        Helpers.Logger.Info(scene.name);
+        
+        if (scene.name != Constants.LOAD_ITEMS_SCENE)
+            return;
 
-        Logger.LogDebug("Patching...");
+        var items = Resources.FindObjectsOfTypeAll<Item>();
+        
+        Helpers.Logger.Info("Items loaded count: " + items.Length);
 
-        Harmony.PatchAll();
-
-        Logger.LogDebug("Finished patching!");
-    }
-
-    internal static void Unpatch()
-    {
-        Logger.LogDebug("Unpatching...");
-
-        Harmony?.UnpatchSelf();
-
-        Logger.LogDebug("Finished unpatching!");
+        foreach (var item in items)
+        {
+            if (item == null)
+                continue;
+            
+            Helpers.Logger.Info("Item loaded: " + item.itemName);
+        }
     }
 }
