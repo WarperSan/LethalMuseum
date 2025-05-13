@@ -55,6 +55,7 @@
 
     <ItemGroup>
       <Folder Include="Managers\" />
+      <Folder Include="Resources\" />
       <Folder Include="UI\" />
     </ItemGroup>
 </Project>
