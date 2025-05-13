@@ -13,24 +13,29 @@ public class ItemBoard : MonoBehaviour
 
     [SerializeField] private Image? icon;
     [SerializeField] private TMP_Text? text;
-    [SerializeField] private List<Sprite>? invalidIcons;
 
     #endregion
 
-    public void SetItem(Item item)
+    [System.Flags]
+    internal enum DisplayItemMode
     {
-        var isValidIcon = invalidIcons?.Contains(item.itemIcon) ?? true;
+        NONE = 0b0,
+        ICON = 0b01,
+        TEXT = 0b10
+    }
 
+    internal void SetItem(Item item, DisplayItemMode mode)
+    {
         if (icon != null)
         {
             icon.sprite = item.itemIcon;
-            icon.enabled = isValidIcon;
+            icon.enabled = mode.HasFlag(DisplayItemMode.ICON);
         }
 
         if (text != null)
         {
             text.text = item.itemName ?? "Scrap";
-            text.enabled = !isValidIcon;
+            text.enabled = mode.HasFlag(DisplayItemMode.TEXT);
         }
     }
 }
