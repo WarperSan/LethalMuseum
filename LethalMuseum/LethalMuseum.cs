@@ -9,6 +9,7 @@ namespace LethalMuseum;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
+[BepInDependency(LethalLib.Plugin.ModGUID)]
 public class LethalMuseum : BaseUnityPlugin
 {
     private void Awake()
@@ -33,14 +34,12 @@ public class LethalMuseum : BaseUnityPlugin
 
         var items = Resources.FindObjectsOfTypeAll<Item>();
         
-        Helpers.Logger.Info("Items loaded count: " + items.Length);
-
         foreach (var item in items)
         {
             if (item == null)
                 continue;
             
-            Helpers.Logger.Info("Item loaded: " + item.itemName);
+            Objects.Register.RegisterItem(item);
         }
     }
 

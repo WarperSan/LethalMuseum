@@ -1,4 +1,5 @@
 ﻿using LethalMuseum.Dependencies.InputUtils;
+using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +10,6 @@ namespace LethalMuseum.UI;
 
 public class ItemsBoard : MonoBehaviour
 {
-    internal static ItemsBoard? Instance;
-    
     #region Fields
 
     [Header("Items")]
@@ -26,15 +25,13 @@ public class ItemsBoard : MonoBehaviour
     [SerializeField] private TMP_Text? pageText;
     [SerializeField] private Graphic? leftPageIcon;
     [SerializeField] private Graphic? rightPageIcon;
-    
+
     #endregion
 
     #region Unity
 
     private void Start()
     {
-        Instance = this;
-
         if (CustomInputActions.Actions != null)
         {
             if (CustomInputActions.Actions.ToggleVisibilityKey != null)
@@ -42,10 +39,19 @@ public class ItemsBoard : MonoBehaviour
 
             if (CustomInputActions.Actions.PageLeftKey != null)
                 CustomInputActions.Actions.PageLeftKey.performed += _ => OnPageMove(true);
-            
+
             if (CustomInputActions.Actions.PageRightKey != null)
                 CustomInputActions.Actions.PageRightKey.performed += _ => OnPageMove(false);
         }
+
+        if (Tracker.Instance != null)
+        {
+            Tracker.Instance.OnCollected += OnCollected;
+            Tracker.Instance.OnDiscarded += OnDiscarded;
+        }
+        
+        UpdatePage();
+        UpdateInformation();
     }
 
     private void OnToggle(bool isActive)
@@ -59,6 +65,42 @@ public class ItemsBoard : MonoBehaviour
         );
     }
 
+    
+    private void OnCollected(string item) => UpdateInformation();
+
+    private void OnDiscarded(string item)
+    {
+        
+    }
+
+    #endregion
+
+    #region Information
+
+    private void UpdateInformation()
+    {
+        var collectedCount = Tracker.Instance?.GetCollectedCount() ?? 0;
+        var totalCount = Register.GetRegisteredCount();
+        
+        if (collectedAmountText != null)
+            collectedAmountText.text = collectedCount.ToString();
+        
+        if (totalAmountText != null)
+            totalAmountText.text = totalCount.ToString();
+
+        if (percentAmountText != null)
+        {
+            var percent = totalCount != 0 ? (float)collectedCount / totalCount : 0;
+            percentAmountText.text = $"{percent:N1}%";
+        }
+    }
+
+    #endregion
+
+    #region Pages
+
+    private int pageIndex;
+    
     private void OnPageMove(bool scrollLeft)
     {
         if (scrollLeft)
@@ -82,12 +124,6 @@ public class ItemsBoard : MonoBehaviour
         UpdatePage();
     }
 
-    #endregion
-
-    #region Pages
-
-    private int pageIndex;
-
     private void UpdatePage()
     {
         pageText?.SetText((pageIndex + 1).ToString());
@@ -97,27 +133,23 @@ public class ItemsBoard : MonoBehaviour
 
         if (rightPageIcon != null)
             rightPageIcon.enabled = pageIndex < int.MaxValue;
-    }
 
-    #endregion
-
-    public void SetItems(Item[] items)
-    {
-        if (itemsContainer == null)
-            return;
-
-        foreach (Transform child in itemsContainer)
-            Destroy(child);
-        
-        if (itemPrefab == null)
-            return;
-        
-        foreach (var item in items)
+        if (itemsContainer != null && itemPrefab != null)
         {
-            var instance = Instantiate(itemPrefab, itemsContainer, false);
+            foreach (Transform child in itemsContainer)
+                Destroy(child.gameObject);
+
+            var items = Register.GetPage(pageIndex, 16);
             
-            if (instance.TryGetComponent(out ItemBoard itemBoard))
-                itemBoard.SetItem(item);
+            foreach (var item in items)
+            {
+                var instance = Instantiate(itemPrefab, itemsContainer, false);
+            
+                if (instance.TryGetComponent(out ItemBoard itemBoard))
+                    itemBoard.SetItem(item);
+            }
         }
     }
+    
+    #endregion
 }
