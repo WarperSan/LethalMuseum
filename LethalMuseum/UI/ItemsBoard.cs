@@ -1,4 +1,4 @@
-﻿using System;
+﻿using LethalMuseum.Dependencies.InputUtils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +34,69 @@ public class ItemsBoard : MonoBehaviour
     private void Start()
     {
         Instance = this;
+
+        if (CustomInputActions.Actions != null)
+        {
+            if (CustomInputActions.Actions.ToggleVisibilityKey != null)
+                CustomInputActions.Actions.ToggleVisibilityKey.performed += _ => OnToggle(!gameObject.activeSelf);
+
+            if (CustomInputActions.Actions.PageLeftKey != null)
+                CustomInputActions.Actions.PageLeftKey.performed += _ => OnPageMove(true);
+            
+            if (CustomInputActions.Actions.PageRightKey != null)
+                CustomInputActions.Actions.PageRightKey.performed += _ => OnPageMove(false);
+        }
+    }
+
+    private void OnToggle(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+        
+        Helpers.Audio.PlayUI(
+            isActive
+                ? GameNetworkManager.Instance?.buttonPressSFX
+                : GameNetworkManager.Instance?.buttonCancelSFX
+        );
+    }
+
+    private void OnPageMove(bool scrollLeft)
+    {
+        if (scrollLeft)
+            pageIndex--;
+        else
+            pageIndex++;
+
+        if (pageIndex < 0)
+        {
+            pageIndex = 0;
+            Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
+        }
+        else if (pageIndex > int.MaxValue)
+        {
+            pageIndex = int.MaxValue;
+            Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
+        }
+        else
+            Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonTuneSFX);
+        
+        UpdatePage();
+    }
+
+    #endregion
+
+    #region Pages
+
+    private int pageIndex;
+
+    private void UpdatePage()
+    {
+        pageText?.SetText((pageIndex + 1).ToString());
+
+        if (leftPageIcon != null)
+            leftPageIcon.enabled = pageIndex > 0;
+
+        if (rightPageIcon != null)
+            rightPageIcon.enabled = pageIndex < int.MaxValue;
     }
 
     #endregion

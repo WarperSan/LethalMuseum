@@ -1,5 +1,6 @@
 using BepInEx;
 using HarmonyLib;
+using LethalMuseum.Dependencies.InputUtils;
 using LethalMuseum.Helpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,7 @@ using UnityEngine.SceneManagement;
 namespace LethalMuseum;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
 public class LethalMuseum : BaseUnityPlugin
 {
     private void Awake()
@@ -16,6 +18,7 @@ public class LethalMuseum : BaseUnityPlugin
         if (!LoadAssets("lm-bundle"))
             return;
 
+        LoadDependencies();
         Patch();
         
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -25,8 +28,6 @@ public class LethalMuseum : BaseUnityPlugin
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Helpers.Logger.Info(scene.name);
-        
         if (scene.name != Constants.LOAD_ITEMS_SCENE)
             return;
 
@@ -69,6 +70,15 @@ public class LethalMuseum : BaseUnityPlugin
     {
         Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         Harmony.PatchAll();
+    }
+
+    #endregion
+
+    #region Dependencies
+
+    private static void LoadDependencies()
+    {
+        CustomInputActions.Actions = new CustomInputActions();
     }
 
     #endregion
