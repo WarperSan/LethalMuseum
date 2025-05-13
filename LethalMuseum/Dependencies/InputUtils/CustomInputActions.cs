@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace LethalMuseum.Dependencies.InputUtils;
 
-public class CustomInputActions : LcInputActions
+internal class CustomInputActions : LcInputActions
 {
     internal static CustomInputActions? Actions;
     
