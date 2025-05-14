@@ -1,0 +1,8 @@
+﻿<Project>
+    <!-- PATHS -->
+    <PropertyGroup>
+        <Profiles></Profiles>
+        <Profile></Profile>
+        <BepinEx>$(Profiles)\$(Profile)\BepInEx\plugins</BepinEx>
+    </PropertyGroup>
+</Project>

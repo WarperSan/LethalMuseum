@@ -53,7 +53,12 @@
     <ItemGroup>
         <PackageReference Include="Rune580.Mods.LethalCompany.InputUtils" Version="0.7.10" />
         <PackageReference Include="Evaisa.LethalLib " Version="1.0.3" />
+        <Reference Include="LethalConfig">
+            <HintPath>$(BepinEx)\AinaVT-LethalConfig\LethalConfig\LethalConfig.dll</HintPath>
+        </Reference>
     </ItemGroup>
+
+    <Import Project="FileInformation.targets" />
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
