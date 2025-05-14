@@ -85,5 +85,14 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public int GetCollectedCount() => itemsCollected.Count;
 
+    /// <summary>
+    /// Checks if the given item is collected
+    /// </summary>
+    public bool IsCollected(Item item)
+    {
+        var id = ItemIdentifier.GetID(item);
+        return itemsCollected.Contains(id);
+    }
+
     #endregion
 }

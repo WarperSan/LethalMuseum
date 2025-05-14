@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +13,7 @@ public class ItemBoard : MonoBehaviour
 
     [SerializeField] private Image? icon;
     [SerializeField] private TMP_Text? text;
+    [SerializeField] private Image? collectedBackground;
 
     #endregion
 
@@ -37,5 +38,8 @@ public class ItemBoard : MonoBehaviour
             text.text = item.itemName ?? "Scrap";
             text.enabled = mode.HasFlag(DisplayItemMode.TEXT);
         }
+
+        if (Tracker.Instance != null && collectedBackground != null)
+            collectedBackground.enabled = Tracker.Instance.IsCollected(item);
     }
 }

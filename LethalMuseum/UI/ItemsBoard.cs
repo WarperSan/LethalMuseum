@@ -144,7 +144,7 @@ public class ItemsBoard : MonoBehaviour
             foreach (var item in items)
             {
                 var instance = Instantiate(itemPrefab, itemsContainer, false);
-            
+
                 if (instance.TryGetComponent(out ItemBoard itemBoard))
                     itemBoard.SetItem(item, ItemBoard.DisplayItemMode.ICON);
             }
