@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using LethalMuseum.Dependencies.LethalLib;
 using UnityEngine;
-using Logger = LethalMuseum.Helpers.Logger;
 
 namespace LethalMuseum.Objects;
 
