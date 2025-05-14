@@ -3,7 +3,7 @@
 namespace LethalMuseum.Helpers;
 
 /// <summary>
-///     Helper to log things from this mod
+/// Helper to log things from this mod
 /// </summary>
 internal static class Logger
 {

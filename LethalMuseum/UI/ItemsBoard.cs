@@ -124,6 +124,9 @@ public class ItemsBoard : MonoBehaviour
     
     private void OnPageMove(bool scrollLeft)
     {
+        if (!gameObject.activeSelf)
+            return;
+
         if (scrollLeft)
             pageIndex--;
         else

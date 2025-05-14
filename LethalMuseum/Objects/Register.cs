@@ -10,7 +10,6 @@ namespace LethalMuseum.Objects;
 internal static class Register
 {
     private static readonly Dictionary<string, Item> itemsData = [];
-    private static readonly HashSet<string> disabledItems = [];
 
     /// <summary>
     /// Registers the given item
@@ -19,24 +18,34 @@ internal static class Register
     {
         var id = ItemIdentifier.GetID(item);
 
-        if (itemsData.ContainsKey(id))
+        if (!itemsData.TryAdd(id, item))
         {
             Logger.Debug($"An item has already been registered under the value '{id}'.");
             return;
         }
-        
-        itemsData.Add(id, item);
 
         SetItemEnable(item, registerAsEnabled);
     }
 
     /// <summary>
+    /// Fetches the amount of items registered
+    /// </summary>
+    public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
+
+    #region Item Status
+    
+    private static readonly HashSet<string> disabledItems = [];
+
+    /// <summary>
     /// Sets the status of the given item
     /// </summary>
-    public static void SetItemEnable(Item item, bool isEnabled)
+    public static void SetItemEnable(Item item, bool isEnabled) => SetItemEnable(ItemIdentifier.GetID(item), isEnabled);
+    
+    /// <summary>
+    /// Sets the status of the item with the given ID
+    /// </summary>
+    private static void SetItemEnable(string id, bool isEnabled)
     {
-        var id = ItemIdentifier.GetID(item);
-
         if (isEnabled)
             disabledItems.Remove(id);
         else
@@ -48,11 +57,10 @@ internal static class Register
     /// </summary>
     public static bool IsAllowed(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
 
-    /// <summary>
-    /// Fetches the amount of items registered
-    /// </summary>
-    public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
+    #endregion
 
+    #region Pages
+    
     /// <summary>
     /// Fetches the items to display on the given page
     /// </summary>
@@ -91,4 +99,6 @@ internal static class Register
 
         return UnityEngine.Mathf.FloorToInt(pageCount);
     }
+
+    #endregion
 }
