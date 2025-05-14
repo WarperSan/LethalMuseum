@@ -19,6 +19,12 @@ public class Tracker : MonoBehaviour
         Instance = this;
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
     #endregion
 
     #region Events
