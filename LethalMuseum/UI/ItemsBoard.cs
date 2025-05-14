@@ -1,4 +1,5 @@
-﻿using LethalMuseum.Dependencies.InputUtils;
+﻿using System;
+using LethalMuseum.Dependencies.InputUtils;
 using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
@@ -65,12 +66,16 @@ public class ItemsBoard : MonoBehaviour
         );
     }
 
-    
-    private void OnCollected(string item) => UpdateInformation();
-
-    private void OnDiscarded(string item)
+    private void OnCollected(string id)
     {
-        
+        OnItemUpdated?.Invoke(id);
+        UpdateInformation();
+    }
+
+    private void OnDiscarded(string id)
+    {
+        OnItemUpdated?.Invoke(id);
+        UpdateInformation();
     }
 
     #endregion
@@ -115,6 +120,7 @@ public class ItemsBoard : MonoBehaviour
     #region Pages
 
     private int pageIndex;
+    private event Action<string>? OnItemUpdated; 
     
     private void OnPageMove(bool scrollLeft)
     {
@@ -155,7 +161,12 @@ public class ItemsBoard : MonoBehaviour
         if (itemsContainer != null && itemPrefab != null)
         {
             foreach (Transform child in itemsContainer)
+            {
+                if (child.gameObject.TryGetComponent(out ItemBoard itemBoard))
+                    OnItemUpdated -= itemBoard.OnItemUpdate;
+
                 Destroy(child.gameObject);
+            }
 
             var items = Register.GetPage(pageIndex, Constants.ITEMS_PER_PAGE);
             
@@ -164,7 +175,10 @@ public class ItemsBoard : MonoBehaviour
                 var instance = Instantiate(itemPrefab, itemsContainer, false);
 
                 if (instance.TryGetComponent(out ItemBoard itemBoard))
+                {
                     itemBoard.SetItem(item, ItemBoard.DisplayItemMode.ICON);
+                    OnItemUpdated += itemBoard.OnItemUpdate;
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using LethalMuseum.Objects;
+﻿using LethalMuseum.Dependencies.LethalLib;
+using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,22 +25,44 @@ public class ItemBoard : MonoBehaviour
         ICON = 0b01,
         TEXT = 0b10
     }
+    
+    private string? targetId;
+    private Item? shownItem;
 
     internal void SetItem(Item item, DisplayItemMode mode)
     {
+        targetId = ItemIdentifier.GetID(item);
+        shownItem = item;
+        
         if (icon != null)
-        {
-            icon.sprite = item.itemIcon;
             icon.enabled = mode.HasFlag(DisplayItemMode.ICON);
-        }
 
         if (text != null)
-        {
-            text.text = item.itemName ?? "Scrap";
             text.enabled = mode.HasFlag(DisplayItemMode.TEXT);
-        }
+        
+        UpdateSelf();
+    }
+
+    internal void OnItemUpdate(string id)
+    {
+        if (targetId != id)
+            return;
+        
+        UpdateSelf();
+    }
+    
+    private void UpdateSelf()
+    {
+        if (shownItem == null)
+            return;
+
+        if (icon != null)
+            icon.sprite = shownItem.itemIcon;
+
+        if (text != null)
+            text.text = shownItem.itemName ?? "Scrap";
 
         if (Tracker.Instance != null && collectedBackground != null)
-            collectedBackground.enabled = Tracker.Instance.IsCollected(item);
+            collectedBackground.enabled = Tracker.Instance.IsCollected(shownItem);
     }
 }
