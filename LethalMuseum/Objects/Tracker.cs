@@ -17,6 +17,16 @@ public class Tracker : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        var items = FindObjectsOfType<GrabbableObject>();
+
+        foreach (var item in items)
+        {
+            if (!item.isInShipRoom)
+                continue;
+
+            Collect(item);
+        }
     }
 
     private void OnDestroy()
