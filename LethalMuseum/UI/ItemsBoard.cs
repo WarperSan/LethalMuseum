@@ -136,9 +136,10 @@ public class ItemsBoard : MonoBehaviour
             Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
         }
         else
+        {
             Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonTuneSFX);
-        
-        UpdatePage();
+            UpdatePage();
+        }
     }
 
     private void UpdatePage()
