@@ -27,7 +27,19 @@ internal static class Register
         
         itemsData.Add(id, item);
 
-        if (!registerAsEnabled)
+        SetItemEnable(item, registerAsEnabled);
+    }
+
+    /// <summary>
+    /// Sets the status of the given item
+    /// </summary>
+    public static void SetItemEnable(Item item, bool isEnabled)
+    {
+        var id = ItemIdentifier.GetID(item);
+
+        if (isEnabled)
+            disabledItems.Remove(id);
+        else
             disabledItems.Add(id);
     }
 
@@ -39,7 +51,7 @@ internal static class Register
     /// <summary>
     /// Fetches the amount of items registered
     /// </summary>
-    public static int GetRegisteredCount() => itemsData.Count;
+    public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
 
     /// <summary>
     /// Fetches the items to display on the given page
@@ -51,7 +63,7 @@ internal static class Register
 
         foreach (var (id, item) in itemsData)
         {
-            if (disabledItems.Contains(id))
+            if (!IsAllowed(id))
                 continue;
 
             if (offset > 0)
@@ -74,7 +86,7 @@ internal static class Register
     /// </summary>
     public static int GetPageCount(int pageSize)
     {
-        var totalItemCount = itemsData.Count - disabledItems.Count;
+        var totalItemCount = GetRegisteredCount();
         var pageCount = (float)totalItemCount / pageSize;
 
         return UnityEngine.Mathf.FloorToInt(pageCount);
