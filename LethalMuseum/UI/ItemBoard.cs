@@ -18,27 +18,22 @@ public class ItemBoard : MonoBehaviour
 
     #endregion
 
-    [System.Flags]
-    internal enum DisplayItemMode
-    {
-        NONE = 0b0,
-        ICON = 0b01,
-        TEXT = 0b10
-    }
-    
     private string? targetId;
     private Item? shownItem;
 
-    internal void SetItem(Item item, DisplayItemMode mode)
+    internal void SetItem(Item item)
     {
         targetId = ItemIdentifier.GetID(item);
         shownItem = item;
-        
+
+        var showIcon = item.itemIcon != null && item.itemIcon.name != Constants.SCRAP_ICON_NAME;
+        var showText = !showIcon;
+
         if (icon != null)
-            icon.enabled = mode.HasFlag(DisplayItemMode.ICON);
+            icon.enabled = showIcon;
 
         if (text != null)
-            text.enabled = mode.HasFlag(DisplayItemMode.TEXT);
+            text.enabled = showText;
         
         UpdateSelf();
     }

@@ -7,4 +7,5 @@ internal static class Constants
     public const string SIBLING_BEFORE = "LoadingText";
 
     public const int ITEMS_PER_PAGE = 16;
+    public const string SCRAP_ICON_NAME = "ScrapItemIcon2";
 }

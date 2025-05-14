@@ -176,7 +176,7 @@ public class ItemsBoard : MonoBehaviour
 
                 if (instance.TryGetComponent(out ItemBoard itemBoard))
                 {
-                    itemBoard.SetItem(item, ItemBoard.DisplayItemMode.ICON);
+                    itemBoard.SetItem(item);
                     OnItemUpdated += itemBoard.OnItemUpdate;
                 }
             }
