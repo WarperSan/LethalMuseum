@@ -68,4 +68,15 @@ internal static class Register
         
         return items.ToArray();
     }
+
+    /// <summary>
+    /// Fetches the number of pages
+    /// </summary>
+    public static int GetPageCount(int pageSize)
+    {
+        var totalItemCount = itemsData.Count - disabledItems.Count;
+        var pageCount = (float)totalItemCount / pageSize;
+
+        return UnityEngine.Mathf.FloorToInt(pageCount);
+    }
 }

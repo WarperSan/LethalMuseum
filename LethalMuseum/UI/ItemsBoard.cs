@@ -108,14 +108,16 @@ public class ItemsBoard : MonoBehaviour
         else
             pageIndex++;
 
+        var maxPageCount = Register.GetPageCount(Constants.ITEMS_PER_PAGE);
+
         if (pageIndex < 0)
         {
             pageIndex = 0;
             Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
         }
-        else if (pageIndex > int.MaxValue)
+        else if (pageIndex > maxPageCount)
         {
-            pageIndex = int.MaxValue;
+            pageIndex = maxPageCount;
             Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
         }
         else
@@ -132,14 +134,14 @@ public class ItemsBoard : MonoBehaviour
             leftPageIcon.enabled = pageIndex > 0;
 
         if (rightPageIcon != null)
-            rightPageIcon.enabled = pageIndex < int.MaxValue;
+            rightPageIcon.enabled = pageIndex < Register.GetPageCount(Constants.ITEMS_PER_PAGE);
 
         if (itemsContainer != null && itemPrefab != null)
         {
             foreach (Transform child in itemsContainer)
                 Destroy(child.gameObject);
 
-            var items = Register.GetPage(pageIndex, 16);
+            var items = Register.GetPage(pageIndex, Constants.ITEMS_PER_PAGE);
             
             foreach (var item in items)
             {
