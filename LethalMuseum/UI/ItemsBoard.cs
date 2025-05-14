@@ -96,9 +96,17 @@ public class ItemsBoard : MonoBehaviour
 
         if (percentAmountText != null)
         {
-            var percent = totalCount != 0 ? (float)collectedCount / totalCount : 0;
-            percentAmountText.text = $"{percent:N1}%";
-            percentAmountText.color = collectedCount >= totalCount ? Color.green : Color.white;
+            if (collectedCount < totalCount)
+            {
+                var percent = totalCount != 0 ? (float)collectedCount / totalCount * 100 : 0;
+                percentAmountText.text = $"{percent:N1}%";
+                percentAmountText.color = Color.white;
+            }
+            else
+            {
+                percentAmountText.text = "100%";
+                percentAmountText.color = Color.green;
+            }
         }
     }
 
