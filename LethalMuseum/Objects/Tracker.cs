@@ -17,16 +17,7 @@ public class Tracker : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
-        var items = FindObjectsOfType<GrabbableObject>();
-
-        foreach (var item in items)
-        {
-            if (!item.isInShipRoom)
-                continue;
-
-            Collect(item);
-        }
+        ResetCollected();
     }
 
     private void OnDestroy()
@@ -81,6 +72,24 @@ public class Tracker : MonoBehaviour
 
         itemsCollected.Remove(id);
         OnDiscarded?.Invoke(id);
+    }
+
+    /// <summary>
+    /// Resets the collected items and marks every item in the ship as collected
+    /// </summary>
+    public void ResetCollected()
+    {
+        itemsCollected.Clear();
+        
+        var items = FindObjectsOfType<GrabbableObject>();
+
+        foreach (var item in items)
+        {
+            if (!item.isInShipRoom)
+                continue;
+
+            Collect(item);
+        }
     }
 
     #endregion
