@@ -81,17 +81,24 @@ public class ItemsBoard : MonoBehaviour
     {
         var collectedCount = Tracker.Instance?.GetCollectedCount() ?? 0;
         var totalCount = Register.GetRegisteredCount();
-        
+
         if (collectedAmountText != null)
+        {
             collectedAmountText.text = collectedCount.ToString();
-        
+            collectedAmountText.color = collectedCount >= totalCount ? Color.green : Color.white;
+        }
+
         if (totalAmountText != null)
+        {
             totalAmountText.text = totalCount.ToString();
+            totalAmountText.color = collectedCount >= totalCount ? Color.green : Color.white;
+        }
 
         if (percentAmountText != null)
         {
             var percent = totalCount != 0 ? (float)collectedCount / totalCount : 0;
             percentAmountText.text = $"{percent:N1}%";
+            percentAmountText.color = collectedCount >= totalCount ? Color.green : Color.white;
         }
     }
 
