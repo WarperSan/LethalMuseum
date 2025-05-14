@@ -38,10 +38,7 @@ public class Tracker : MonoBehaviour
         var id = ItemIdentifier.GetID(item.itemProperties);
         
         if (!Register.IsAllowed(id))
-        {
-            Logger.Debug($"The item '{item}' is not an item able to be collected.");
             return;
-        }
         
         // ReSharper disable once CanSimplifySetAddingWithSingleCall
         if (itemsCollected.Contains(id))
@@ -62,10 +59,7 @@ public class Tracker : MonoBehaviour
         var id = ItemIdentifier.GetID(item.itemProperties);
 
         if (!Register.IsAllowed(id))
-        {
-            Logger.Debug($"The item '{item}' is not an item able to be collected.");
             return;
-        }
         
         if (!itemsCollected.Contains(id))
             return;

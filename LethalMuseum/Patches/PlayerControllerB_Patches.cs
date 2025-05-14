@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using LethalMuseum.Objects;
 using UnityEngine;
 using Logger = LethalMuseum.Helpers.Logger;
 
@@ -8,8 +9,7 @@ namespace LethalMuseum.Patches;
 [HarmonyPatch(typeof(PlayerControllerB))]
 internal class PlayerControllerB_Patches
 {
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerControllerB.ConnectClientToPlayerObject))]
+    [HarmonyPatch(nameof(PlayerControllerB.ConnectClientToPlayerObject)), HarmonyPostfix]
     private static void PlayerLoad(PlayerControllerB __instance)
     {
         var canvas = GameObject.Find(Constants.CANVAS_PATH);
@@ -42,5 +42,20 @@ internal class PlayerControllerB_Patches
         rectTransform.offsetMax = Vector2.zero;
 
         Object.Instantiate(LethalMuseum.ITEMS_BOARD, parent.transform, false);
+    }
+
+    [HarmonyPatch(nameof(PlayerControllerB.SetItemInElevator)), HarmonyPrefix]
+    private static void SetItemInElevator_Prefix(bool droppedInShipRoom, bool droppedInElevator, GrabbableObject gObject)
+    {
+        if (gObject == null)
+            return;
+        
+        if (gObject.isInShipRoom == droppedInShipRoom)
+            return;
+
+        if (droppedInShipRoom)
+            Tracker.Instance?.Collect(gObject);
+        else
+            Tracker.Instance?.Discard(gObject);
     }
 }
