@@ -32,6 +32,25 @@ internal static class Register
     /// </summary>
     public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
 
+    /// <summary>
+    /// Fetches all the items registered
+    /// </summary>
+    /// <returns></returns>
+    public static Item[] GetAll()
+    {
+        var items = new Item[itemsData.Count];
+
+        int index = 0;
+
+        foreach (var (_, item) in itemsData)
+        {
+            items[index] = item;
+            index++;
+        }
+
+        return items;
+    }
+
     #region Item Status
     
     private static readonly HashSet<string> disabledItems = [];
