@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LethalMuseum.Dependencies.LethalLib;
 using UnityEngine;
 
 namespace LethalMuseum.Objects;
@@ -38,14 +37,11 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Collect(GrabbableObject? item)
     {
-        if (item == null)
+        if (item == null || !Register.IsAllowed(item))
             return;
 
-        var id = ItemIdentifier.GetID(item.itemProperties);
-        
-        if (!Register.IsAllowed(id))
-            return;
-        
+        var id = Identifier.GetID(item);
+
         // ReSharper disable once CanSimplifySetAddingWithSingleCall
         if (itemsCollected.Contains(id))
             return;
@@ -59,14 +55,11 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Discard(GrabbableObject? item)
     {
-        if (item == null)
+        if (item == null || !Register.IsAllowed(item))
             return;
 
-        var id = ItemIdentifier.GetID(item.itemProperties);
+        var id = Identifier.GetID(item);
 
-        if (!Register.IsAllowed(id))
-            return;
-        
         if (!itemsCollected.Contains(id))
             return;
 
@@ -108,7 +101,7 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public bool IsCollected(Item item)
     {
-        var id = ItemIdentifier.GetID(item);
+        var id = Identifier.GetID(item);
         return itemsCollected.Contains(id);
     }
 

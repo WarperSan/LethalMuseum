@@ -1,5 +1,4 @@
-﻿using LethalMuseum.Dependencies.LethalLib;
-using LethalMuseum.Objects;
+﻿using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,10 +43,7 @@ public class ItemList : MonoBehaviour
         }
 
         if (toggle != null)
-        {
-            var id = ItemIdentifier.GetID(item);
-            toggle.isOn = Register.IsAllowed(id);
-        }
+            toggle.isOn = Register.IsAllowed(item);
     }
     
     private void ToggleItem(bool isActive)

@@ -1,5 +1,4 @@
-﻿using LethalMuseum.Dependencies.LethalLib;
-using LethalMuseum.Objects;
+﻿using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +22,7 @@ public class ItemBoard : MonoBehaviour
 
     internal void SetItem(Item item)
     {
-        targetId = ItemIdentifier.GetID(item);
+        targetId = Identifier.GetID(item);
         shownItem = item;
 
         var showIcon = item.itemIcon != null && item.itemIcon.name != Constants.SCRAP_ICON_NAME;

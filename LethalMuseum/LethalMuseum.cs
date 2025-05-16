@@ -1,6 +1,7 @@
 using BepInEx;
 using HarmonyLib;
 using LethalMuseum.Dependencies.InputUtils;
+using LethalMuseum.Dependencies.LethalLib;
 using LethalMuseum.Helpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -78,6 +79,7 @@ public class LethalMuseum : BaseUnityPlugin
     private static void LoadDependencies()
     {
         CustomInputActions.Actions = new CustomInputActions();
+        ModdedItemIdentifier.LoadModdedItems();
     }
 
     #endregion

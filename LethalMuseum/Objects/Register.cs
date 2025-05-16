@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LethalMuseum.Dependencies.LethalLib;
 using LethalMuseum.Helpers;
 
 namespace LethalMuseum.Objects;
@@ -16,7 +15,7 @@ internal static class Register
     /// </summary>
     public static void RegisterItem(Item item, bool registerAsEnabled = true)
     {
-        var id = ItemIdentifier.GetID(item);
+        var id = Identifier.GetID(item);
 
         if (!itemsData.TryAdd(id, item))
         {
@@ -58,7 +57,7 @@ internal static class Register
     /// <summary>
     /// Sets the status of the given item
     /// </summary>
-    public static void SetItemEnable(Item item, bool isEnabled) => SetItemEnable(ItemIdentifier.GetID(item), isEnabled);
+    public static void SetItemEnable(Item item, bool isEnabled) => SetItemEnable(Identifier.GetID(item), isEnabled);
     
     /// <summary>
     /// Sets the status of the item with the given ID
@@ -70,11 +69,21 @@ internal static class Register
         else
             disabledItems.Add(id);
     }
+    
+    /// <summary>
+    /// Checks if the specific given item is allowed
+    /// </summary>
+    public static bool IsAllowed(GrabbableObject item) => IsAllowed(item.itemProperties);
+    
+    /// <summary>
+    /// Checks if the given item is allowed
+    /// </summary>
+    public static bool IsAllowed(Item item) => IsAllowed(Identifier.GetID(item));
 
     /// <summary>
     /// Checks if the item with the given ID is allowed
     /// </summary>
-    public static bool IsAllowed(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
+    private static bool IsAllowed(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
 
     #endregion
 
