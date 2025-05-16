@@ -46,7 +46,7 @@ public class LethalMuseum : BaseUnityPlugin
     #region Bundle
 
     internal static GameObject? ITEMS_BOARD;
-    internal static GameObject? ITEM_BOARD;
+    internal static GameObject? MUSEUM_FORM;
 
     private static bool LoadAssets(string bundleName)
     {
@@ -54,7 +54,7 @@ public class LethalMuseum : BaseUnityPlugin
             return false;
 
         ITEMS_BOARD = Bundle.LoadAsset<GameObject>("ItemsBoard");
-        ITEM_BOARD = Bundle.LoadAsset<GameObject>("ItemBoard");
+        MUSEUM_FORM = Bundle.LoadAsset<GameObject>("MuseumForm");
         
         return true;
     }
