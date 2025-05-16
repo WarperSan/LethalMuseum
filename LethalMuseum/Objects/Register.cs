@@ -26,31 +26,7 @@ internal static class Register
         SetItemEnable(item, registerAsEnabled);
     }
 
-    /// <summary>
-    /// Fetches the amount of items registered
-    /// </summary>
-    public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
-
-    /// <summary>
-    /// Fetches all the items registered
-    /// </summary>
-    /// <returns></returns>
-    public static Item[] GetAll()
-    {
-        var items = new Item[itemsData.Count];
-
-        int index = 0;
-
-        foreach (var (_, item) in itemsData)
-        {
-            items[index] = item;
-            index++;
-        }
-
-        return items;
-    }
-
-    #region Item Status
+    #region Status
     
     private static readonly HashSet<string> disabledItems = [];
 
@@ -71,23 +47,51 @@ internal static class Register
     }
     
     /// <summary>
-    /// Checks if the specific given item is allowed
+    /// Checks if the specific given item is enabled
     /// </summary>
-    public static bool IsAllowed(GrabbableObject item) => IsAllowed(item.itemProperties);
+    public static bool IsEnabled(GrabbableObject item) => IsEnabled(item.itemProperties);
     
     /// <summary>
-    /// Checks if the given item is allowed
+    /// Checks if the given item is enabled
     /// </summary>
-    public static bool IsAllowed(Item item) => IsAllowed(Identifier.GetID(item));
+    public static bool IsEnabled(Item item) => IsEnabled(Identifier.GetID(item));
 
     /// <summary>
-    /// Checks if the item with the given ID is allowed
+    /// Checks if the item with the given ID is enabled
     /// </summary>
-    private static bool IsAllowed(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
+    private static bool IsEnabled(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
 
     #endregion
 
-    #region Pages
+    #region Count
+
+    /// <summary>
+    /// Fetches the amount of items registered
+    /// </summary>
+    public static int GetRegisteredCount() => itemsData.Count - disabledItems.Count;
+
+    #endregion
+
+    #region Get
+    
+    /// <summary>
+    /// Fetches all the items registered
+    /// </summary>
+    /// <returns></returns>
+    public static Item[] GetAll()
+    {
+        var items = new Item[itemsData.Count];
+
+        int index = 0;
+
+        foreach (var (_, item) in itemsData)
+        {
+            items[index] = item;
+            index++;
+        }
+
+        return items;
+    }
     
     /// <summary>
     /// Fetches the items to display on the given page
@@ -99,7 +103,7 @@ internal static class Register
 
         foreach (var (id, item) in itemsData)
         {
-            if (!IsAllowed(id))
+            if (!IsEnabled(id))
                 continue;
 
             if (offset > 0)

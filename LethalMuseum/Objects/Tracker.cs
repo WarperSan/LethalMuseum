@@ -37,7 +37,7 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Collect(GrabbableObject? item)
     {
-        if (item == null || !Register.IsAllowed(item))
+        if (item == null || !Register.IsEnabled(item))
             return;
 
         var id = Identifier.GetID(item);
@@ -55,7 +55,7 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Discard(GrabbableObject? item)
     {
-        if (item == null || !Register.IsAllowed(item))
+        if (item == null || !Register.IsEnabled(item))
             return;
 
         var id = Identifier.GetID(item);

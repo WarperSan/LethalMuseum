@@ -43,7 +43,7 @@ public class ItemList : MonoBehaviour
         }
 
         if (toggle != null)
-            toggle.isOn = Register.IsAllowed(item);
+            toggle.isOn = Register.IsEnabled(item);
     }
     
     private void ToggleItem(bool isActive)
