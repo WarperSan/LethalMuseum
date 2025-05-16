@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 #pragma warning disable CS0649
 
-namespace LethalMuseum.UI;
+namespace LethalMuseum.UI.Elements;
 
 public class ItemList : MonoBehaviour
 {
@@ -23,7 +23,7 @@ public class ItemList : MonoBehaviour
         toggle?.onValueChanged.AddListener(ToggleItem);
     }
     
-    public UnityEvent<bool>? OnActiveChanged;
+    [HideInInspector] public UnityEvent<bool>? OnActiveChanged;
     
     internal void SetItem(Item item)
     {

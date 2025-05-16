@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 #pragma warning disable CS0649
 
-namespace LethalMuseum.UI;
+namespace LethalMuseum.UI.Elements;
 
 public class ItemBoard : MonoBehaviour
 {

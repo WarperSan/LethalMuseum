@@ -1,10 +1,11 @@
 ﻿using LethalMuseum.Objects;
+using LethalMuseum.UI.Elements;
 using UnityEngine;
 using UnityEngine.UI;
 
 #pragma warning disable CS0649
 
-namespace LethalMuseum.UI;
+namespace LethalMuseum.UI.Forms;
 
 public class ToggleForm : MonoBehaviour
 {
