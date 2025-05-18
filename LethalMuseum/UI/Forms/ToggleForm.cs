@@ -16,6 +16,16 @@ public class ToggleForm : MonoBehaviour
     [SerializeField] private GameObject? itemPrefab;
     [SerializeField] private GameObject? noItemText;
 
+    [Header("Controls")]
+    [SerializeField] private Toggle? allToggle;
+    [SerializeField] private Toggle? scrapsToggle;
+    [SerializeField] private Toggle? toolsToggle;
+    [SerializeField] private Toggle? variantsToggle;
+    [SerializeField] private Toggle? oneHandedToggle;
+    [SerializeField] private Toggle? twoHandedToggle;
+    [SerializeField] private Toggle? conductiveToggle;
+    [SerializeField] private Toggle? batteryToggle;
+
     [Header("Buttons")]
     [SerializeField] private Button? openBtn;
     [SerializeField] private Button? closeBtn;
@@ -32,8 +42,16 @@ public class ToggleForm : MonoBehaviour
         closeBtn?.onClick.AddListener(CloseForm);
         closeBtn?.onClick.AddListener(menuManager.PlayCancelSFX);
         
-        var loadedItems = Register.GetAll();
-        SetItems(loadedItems);
+        allToggle?.onValueChanged.AddListener(onAllToggled);
+        scrapsToggle?.onValueChanged.AddListener(onScrapsToggled);
+        toolsToggle?.onValueChanged.AddListener(onToolsToggled);
+        variantsToggle?.onValueChanged.AddListener(onVariantsToggled);
+        oneHandedToggle?.onValueChanged.AddListener(onOneHandedToggled);
+        twoHandedToggle?.onValueChanged.AddListener(onTwoHandedToggled);
+        conductiveToggle?.onValueChanged.AddListener(onConductiveToggled);
+        batteryToggle?.onValueChanged.AddListener(onBatteryToggled);
+
+        UpdateAllItems();
     }
     
     #region Animations
@@ -72,7 +90,7 @@ public class ToggleForm : MonoBehaviour
         }
     }
 
-    public void SetItems(Item[] items)
+    private void SetItems(Item[] items)
     {
         if (itemListContainer == null)
             return;
@@ -84,6 +102,107 @@ public class ToggleForm : MonoBehaviour
 
         foreach (var item in items)
             AddItem(item);
+    }
+
+    private void UpdateAllItems()
+    {
+        var loadedItems = Register.GetAll();
+        SetItems(loadedItems);
+    }
+    
+    #endregion
+
+    #region Toggles
+
+    private void onAllToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+            Register.SetItemEnable(item, isActive);
+        
+        UpdateAllItems();
+    }
+
+    private void onScrapsToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (!item.isScrap)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
+    }
+    
+    private void onToolsToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (item.isScrap)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
+    }
+    
+    private void onVariantsToggled(bool isActive)
+    {
+        
+    }
+    
+    private void onOneHandedToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (item.twoHanded)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
+    }
+    
+    private void onTwoHandedToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (!item.twoHanded)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
+    }
+    
+    private void onConductiveToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (!item.isConductiveMetal)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
+    }
+    
+    private void onBatteryToggled(bool isActive)
+    {
+        foreach (var item in Register.GetAll())
+        {
+            if (!item.requiresBattery)
+                continue;
+            
+            Register.SetItemEnable(item, isActive);
+        }
+        
+        UpdateAllItems();
     }
 
     #endregion
