@@ -116,35 +116,27 @@ public class ToggleForm : MonoBehaviour
 
     private void onAllToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-            Register.SetItemEnable(item, isActive);
-        
+        Register.ApplyFilter(_ => true, isActive);
         UpdateAllItems();
+        
+        scrapsToggle?.SetIsOnWithoutNotify(isActive);
+        toolsToggle?.SetIsOnWithoutNotify(isActive);
+        variantsToggle?.SetIsOnWithoutNotify(isActive);
+        oneHandedToggle?.SetIsOnWithoutNotify(isActive);
+        twoHandedToggle?.SetIsOnWithoutNotify(isActive);
+        conductiveToggle?.SetIsOnWithoutNotify(isActive);
+        batteryToggle?.SetIsOnWithoutNotify(isActive);
     }
 
     private void onScrapsToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (!item.isScrap)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => item.isScrap, isActive);
         UpdateAllItems();
     }
     
     private void onToolsToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (item.isScrap)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => !item.isScrap, isActive);
         UpdateAllItems();
     }
     
@@ -155,53 +147,25 @@ public class ToggleForm : MonoBehaviour
     
     private void onOneHandedToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (item.twoHanded)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => !item.twoHanded, isActive);
         UpdateAllItems();
     }
     
     private void onTwoHandedToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (!item.twoHanded)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => item.twoHanded, isActive);
         UpdateAllItems();
     }
     
     private void onConductiveToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (!item.isConductiveMetal)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => item.isConductiveMetal, isActive);
         UpdateAllItems();
     }
     
     private void onBatteryToggled(bool isActive)
     {
-        foreach (var item in Register.GetAll())
-        {
-            if (!item.requiresBattery)
-                continue;
-            
-            Register.SetItemEnable(item, isActive);
-        }
-        
+        Register.ApplyFilter(item => item.requiresBattery, isActive);
         UpdateAllItems();
     }
 

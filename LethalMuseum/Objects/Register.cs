@@ -45,6 +45,20 @@ internal static class Register
         else
             disabledItems.Add(id);
     }
+
+    /// <summary>
+    /// Sets the status of the items that matches the given condition
+    /// </summary>
+    public static void ApplyFilter(System.Func<Item, bool> condition, bool isEnabled)
+    {
+        foreach (var (id, item) in itemsData)
+        {
+            if (!condition.Invoke(item))
+                continue;
+            
+            SetItemEnable(id, isEnabled);
+        }
+    }
     
     /// <summary>
     /// Checks if the specific given item is enabled
