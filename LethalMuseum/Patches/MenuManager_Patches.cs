@@ -7,6 +7,8 @@ namespace LethalMuseum.Patches;
 [HarmonyPatch(typeof(MenuManager))]
 internal class MenuManager_Patches
 {
+    private static GameObject? customUI;
+    
     [HarmonyPostfix]
     [HarmonyPatch(nameof(MenuManager.Start))]
     private static void CreateUI(MenuManager __instance)
@@ -36,8 +38,14 @@ internal class MenuManager_Patches
             ui.transform.SetSiblingIndex(index);
 
         if (LethalMuseum.MUSEUM_FORM != null)
-            Object.Instantiate(LethalMuseum.MUSEUM_FORM, ui.transform, false);
+            customUI = Object.Instantiate(LethalMuseum.MUSEUM_FORM, ui.transform, false);
         else
             Logger.Error("Could not spawn the main form.");
+    }
+
+    [HarmonyPatch(nameof(MenuManager.SetLoadingScreen)), HarmonyPrefix]
+    private static void ToggleUI(bool isLoading)
+    {
+        customUI?.SetActive(!isLoading);
     }
 }
