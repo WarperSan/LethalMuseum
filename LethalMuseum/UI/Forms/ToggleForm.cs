@@ -66,6 +66,9 @@ public class ToggleForm : MonoBehaviour
 
     private void CloseForm()
     {
+        if (LethalMuseum.Configuration != null)
+            LethalMuseum.Configuration.Blacklist.Value = Register.GenerateBlacklist();
+        
         animator?.SetTrigger(CloseMenu);
     }
 

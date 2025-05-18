@@ -1,4 +1,5 @@
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using LethalMuseum.Dependencies.InputUtils;
 using LethalMuseum.Dependencies.LethalLib;
@@ -20,6 +21,7 @@ public class LethalMuseum : BaseUnityPlugin
         if (!LoadAssets("lm-bundle"))
             return;
 
+        LoadConfiguration(Config);
         LoadDependencies();
         Patch();
         
@@ -42,6 +44,9 @@ public class LethalMuseum : BaseUnityPlugin
             
             Objects.Register.RegisterItem(item);
         }
+        
+        if (Configuration != null)
+            Objects.Register.ApplyBlacklist(Configuration.Blacklist.Value);
     }
 
     #region Bundle
@@ -80,6 +85,17 @@ public class LethalMuseum : BaseUnityPlugin
     {
         CustomInputActions.Actions = new CustomInputActions();
         ModdedItemIdentifier.LoadModdedItems();
+    }
+
+    #endregion
+
+    #region Configuration
+
+    internal static Configuration? Configuration;
+
+    private static void LoadConfiguration(ConfigFile file)
+    {
+        Configuration = new Configuration(file);
     }
 
     #endregion

@@ -29,6 +29,7 @@ internal static class Register
     #region Status
     
     private static readonly HashSet<string> disabledItems = [];
+    private const char SEPARATION_CHARACTER = '|';
 
     /// <summary>
     /// Sets the status of the given item
@@ -74,6 +75,43 @@ internal static class Register
     /// Checks if the item with the given ID is enabled
     /// </summary>
     private static bool IsEnabled(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
+
+    /// <summary>
+    /// Converts the disabled items to a single value
+    /// </summary>
+    public static string GenerateBlacklist()
+    {
+        var builder = new System.Text.StringBuilder();
+
+        var count = 0;
+
+        foreach (var disabledItem in disabledItems)
+        {
+            builder.Append(disabledItem);
+
+            if (count != disabledItems.Count - 1)
+                builder.Append(SEPARATION_CHARACTER);
+
+            count++;
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// Applies the given blacklist as the disabled items
+    /// </summary>
+    public static void ApplyBlacklist(string blacklist)
+    {
+        Logger.Info(blacklist);
+        var items = blacklist.Split(SEPARATION_CHARACTER, System.StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var item in items)
+        {
+            Logger.Info(item);
+            SetItemEnable(item, false);
+        }
+    }
 
     #endregion
 
