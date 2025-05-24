@@ -8,7 +8,7 @@ namespace LethalMuseum.Objects;
 /// </summary>
 internal static class Register
 {
-    private static readonly Dictionary<string, Item> itemsData = [];
+    private static readonly SortedDictionary<string, Item> itemsData = [];
 
     /// <summary>
     /// Registers the given item
