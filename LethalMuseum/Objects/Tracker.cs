@@ -42,11 +42,14 @@ public class Tracker : MonoBehaviour
 
         var id = Identifier.GetID(item);
 
-        // ReSharper disable once CanSimplifySetAddingWithSingleCall
-        if (itemsCollected.Contains(id))
+        // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
+        if (itemsCollected.ContainsKey(id))
+        {
+            itemsCollected[id]++;
             return;
+        }
 
-        itemsCollected.Add(id);
+        itemsCollected.Add(id, 1);
         OnCollected?.Invoke(id);
     }
 
@@ -60,9 +63,18 @@ public class Tracker : MonoBehaviour
 
         var id = Identifier.GetID(item);
 
-        if (!itemsCollected.Contains(id))
+        // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
+        if (!itemsCollected.ContainsKey(id))
             return;
 
+        var amount = itemsCollected[id] - 1;
+
+        if (amount > 0)
+        {
+            itemsCollected[id] = amount;
+            return;
+        }
+        
         itemsCollected.Remove(id);
         OnDiscarded?.Invoke(id);
     }
@@ -89,7 +101,7 @@ public class Tracker : MonoBehaviour
 
     #region Items
 
-    private readonly HashSet<string> itemsCollected = [];
+    private readonly Dictionary<string, uint> itemsCollected = [];
 
     /// <summary>
     /// Fetches the amount of items collected
@@ -102,7 +114,7 @@ public class Tracker : MonoBehaviour
     public bool IsCollected(Item item)
     {
         var id = Identifier.GetID(item);
-        return itemsCollected.Contains(id);
+        return itemsCollected.ContainsKey(id);
     }
 
     #endregion
