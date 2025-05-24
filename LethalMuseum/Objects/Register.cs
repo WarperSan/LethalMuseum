@@ -15,6 +15,9 @@ internal static class Register
     /// </summary>
     public static void RegisterItem(Item item, bool registerAsEnabled = true)
     {
+        if (!IsItemAllowed(item))
+            return;
+        
         var id = Identifier.GetID(item);
 
         if (!itemsData.TryAdd(id, item))
@@ -24,6 +27,23 @@ internal static class Register
         }
 
         SetItemEnable(item, registerAsEnabled);
+    }
+
+    /// <summary>
+    /// Checks if the given item is allowed at all
+    /// </summary>
+    private static bool IsItemAllowed(Item item)
+    {
+        if (item.lockedInDemo)
+            return false;
+        
+        if (item.spawnPrefab == null)
+            return false;
+
+        if (item.itemName == "Maneater")
+            return LethalMuseum.Configuration?.AllowBaby.Value ?? false;
+
+        return true;
     }
 
     #region Status
