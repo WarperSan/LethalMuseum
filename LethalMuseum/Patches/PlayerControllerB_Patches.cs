@@ -10,7 +10,7 @@ namespace LethalMuseum.Patches;
 internal class PlayerControllerB_Patches
 {
     [HarmonyPatch(nameof(PlayerControllerB.ConnectClientToPlayerObject)), HarmonyPostfix]
-    private static void PlayerLoad(PlayerControllerB __instance)
+    private static void ConnectClientToPlayerObject_Postfix(PlayerControllerB __instance)
     {
         var canvas = GameObject.Find(Constants.IN_GAME_PARENT_PATH);
         

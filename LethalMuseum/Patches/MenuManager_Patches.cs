@@ -9,9 +9,8 @@ internal class MenuManager_Patches
 {
     private static GameObject? customUI;
     
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(MenuManager.Start))]
-    private static void CreateUI(MenuManager __instance)
+    [HarmonyPatch(nameof(MenuManager.Start)), HarmonyPostfix]
+    private static void Start_Postfix(MenuManager __instance)
     {
         // Fetch container
         var container = GameObject.Find(Constants.MAIN_MENU_PARENT_PATH);
@@ -44,7 +43,7 @@ internal class MenuManager_Patches
     }
 
     [HarmonyPatch(nameof(MenuManager.SetLoadingScreen)), HarmonyPrefix]
-    private static void ToggleUI(bool isLoading)
+    private static void SetLoadingScreen_Prefix(bool isLoading)
     {
         customUI?.SetActive(!isLoading);
     }
