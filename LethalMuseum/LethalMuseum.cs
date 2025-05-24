@@ -5,7 +5,6 @@ using LethalMuseum.Dependencies.InputUtils;
 using LethalMuseum.Dependencies.LethalLib;
 using LethalMuseum.Helpers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace LethalMuseum;
 
@@ -25,28 +24,7 @@ public class LethalMuseum : BaseUnityPlugin
         LoadDependencies();
         Patch();
         
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
         Helpers.Logger.Info($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != Constants.LOAD_ITEMS_SCENE)
-            return;
-
-        var items = Resources.FindObjectsOfTypeAll<Item>();
-        
-        foreach (var item in items)
-        {
-            if (item == null)
-                continue;
-            
-            Objects.Register.RegisterItem(item);
-        }
-        
-        if (Configuration != null)
-            Objects.Register.ApplyBlacklist(Configuration.Blacklist.Value);
     }
 
     #region Bundle

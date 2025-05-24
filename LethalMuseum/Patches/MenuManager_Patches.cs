@@ -8,9 +8,37 @@ namespace LethalMuseum.Patches;
 internal class MenuManager_Patches
 {
     private static GameObject? customUI;
-    
+    private static bool hasInitializedItems;
+
     [HarmonyPatch(nameof(MenuManager.Start)), HarmonyPostfix]
     private static void Start_Postfix(MenuManager __instance)
+    {
+        if (__instance.isInitScene)
+            return;
+
+        CreateButton();
+        InitializeItems();
+    }
+
+    [HarmonyPatch(nameof(MenuManager.SetLoadingScreen)), HarmonyPrefix]
+    private static void SetLoadingScreen_Prefix(bool isLoading)
+    {
+        customUI?.SetActive(!isLoading);
+    }
+
+    [HarmonyPatch(nameof(MenuManager.EnableUIPanel)), HarmonyPrefix]
+    private static void EnableUIPanel_Prefix(GameObject enablePanel)
+    {
+        customUI?.SetActive(enablePanel.name == Constants.MAIN_MENU_CENTRAL_MENU_NAME);
+    }
+    
+    [HarmonyPatch(nameof(MenuManager.DisableUIPanel)), HarmonyPrefix]
+    private static void DisableUIPanel_Prefix(GameObject enablePanel)
+    {
+        customUI?.SetActive(enablePanel.name != Constants.MAIN_MENU_CENTRAL_MENU_NAME);
+    }
+
+    private static void CreateButton()
     {
         // Fetch container
         var container = GameObject.Find(Constants.MAIN_MENU_PARENT_PATH);
@@ -42,21 +70,24 @@ internal class MenuManager_Patches
             Logger.Error("Could not spawn the main form.");
     }
 
-    [HarmonyPatch(nameof(MenuManager.SetLoadingScreen)), HarmonyPrefix]
-    private static void SetLoadingScreen_Prefix(bool isLoading)
+    private static void InitializeItems()
     {
-        customUI?.SetActive(!isLoading);
-    }
+        if (hasInitializedItems)
+            return;
+        
+        var items = Resources.FindObjectsOfTypeAll<Item>();
+        
+        foreach (var item in items)
+        {
+            if (item == null)
+                continue;
+            
+            Objects.Register.RegisterItem(item);
+        }
+        
+        if (LethalMuseum.Configuration != null)
+            Objects.Register.ApplyBlacklist(LethalMuseum.Configuration.Blacklist.Value);
 
-    [HarmonyPatch(nameof(MenuManager.EnableUIPanel)), HarmonyPrefix]
-    private static void EnableUIPanel_Prefix(GameObject enablePanel)
-    {
-        customUI?.SetActive(enablePanel.name == Constants.MAIN_MENU_CENTRAL_MENU_NAME);
-    }
-    
-    [HarmonyPatch(nameof(MenuManager.DisableUIPanel)), HarmonyPrefix]
-    private static void DisableUIPanel_Prefix(GameObject enablePanel)
-    {
-        customUI?.SetActive(enablePanel.name != Constants.MAIN_MENU_CENTRAL_MENU_NAME);
+        hasInitializedItems = true;
     }
 }

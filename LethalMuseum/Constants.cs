@@ -2,11 +2,6 @@
 
 internal static class Constants
 {
-    /// <summary>
-    /// Scene where the items are loaded
-    /// </summary>
-    public const string LOAD_ITEMS_SCENE = "MainMenu";
-
     #region Main Menu
 
     /// <summary>
