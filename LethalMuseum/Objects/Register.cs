@@ -103,14 +103,10 @@ internal static class Register
     /// </summary>
     public static void ApplyBlacklist(string blacklist)
     {
-        Logger.Info(blacklist);
         var items = blacklist.Split(SEPARATION_CHARACTER, System.StringSplitOptions.RemoveEmptyEntries);
 
         foreach (var item in items)
-        {
-            Logger.Info(item);
             SetItemEnable(item, false);
-        }
     }
 
     #endregion
