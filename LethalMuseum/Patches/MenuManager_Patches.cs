@@ -14,11 +14,11 @@ internal class MenuManager_Patches
     private static void CreateUI(MenuManager __instance)
     {
         // Fetch container
-        var container = GameObject.Find(Constants.MENU_CONTAINER_PATH);
+        var container = GameObject.Find(Constants.MAIN_MENU_PARENT_PATH);
 
         if (container == null)
         {
-            Logger.Error($"Could not find the container at '{Constants.MENU_CONTAINER_PATH}'.");
+            Logger.Error($"Could not find the container at '{Constants.MAIN_MENU_PARENT_PATH}'.");
             return;
         }
 
@@ -32,7 +32,7 @@ internal class MenuManager_Patches
         rect.anchoredPosition = Vector2.zero;
         rect.offsetMin = rect.offsetMax = Vector2.zero;
 
-        var index = container.transform.Find("LobbyHostSettings")?.GetSiblingIndex() ?? -1;
+        var index = container.transform.Find(Constants.MAIN_MENU_SIBLING_BEFORE)?.GetSiblingIndex() ?? -1;
 
         if (index != -1)
             ui.transform.SetSiblingIndex(index);
@@ -47,5 +47,17 @@ internal class MenuManager_Patches
     private static void ToggleUI(bool isLoading)
     {
         customUI?.SetActive(!isLoading);
+    }
+
+    [HarmonyPatch(nameof(MenuManager.EnableUIPanel)), HarmonyPrefix]
+    private static void EnableUIPanel_Prefix(GameObject enablePanel)
+    {
+        customUI?.SetActive(enablePanel.name == Constants.MAIN_MENU_CENTRAL_MENU_NAME);
+    }
+    
+    [HarmonyPatch(nameof(MenuManager.DisableUIPanel)), HarmonyPrefix]
+    private static void DisableUIPanel_Prefix(GameObject enablePanel)
+    {
+        customUI?.SetActive(enablePanel.name != Constants.MAIN_MENU_CENTRAL_MENU_NAME);
     }
 }

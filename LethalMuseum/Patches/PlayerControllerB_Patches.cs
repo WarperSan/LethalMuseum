@@ -12,7 +12,7 @@ internal class PlayerControllerB_Patches
     [HarmonyPatch(nameof(PlayerControllerB.ConnectClientToPlayerObject)), HarmonyPostfix]
     private static void PlayerLoad(PlayerControllerB __instance)
     {
-        var canvas = GameObject.Find(Constants.CANVAS_PATH);
+        var canvas = GameObject.Find(Constants.IN_GAME_PARENT_PATH);
         
         if (canvas == null)
         {
@@ -26,10 +26,10 @@ internal class PlayerControllerB_Patches
             return;
         }
 
-        var parent = new GameObject(MyPluginInfo.PLUGIN_GUID + "-InGameUI");
+        var parent = new GameObject(nameof(LethalMuseum) + "-InGameUI");
         parent.transform.SetParent(canvas.transform, false);
         
-        var index = canvas.transform.Find(Constants.SIBLING_BEFORE)?.GetSiblingIndex() ?? -1;
+        var index = canvas.transform.Find(Constants.IN_GAME_SIBLING_BEFORE)?.GetSiblingIndex() ?? -1;
         
         if (index >= 0) 
             parent.transform.SetSiblingIndex(index);

@@ -2,11 +2,43 @@
 
 internal static class Constants
 {
+    /// <summary>
+    /// Scene where the items are loaded
+    /// </summary>
     public const string LOAD_ITEMS_SCENE = "MainMenu";
 
-    public const string MENU_CONTAINER_PATH = "Canvas/MenuContainer";
-    public const string CANVAS_PATH = "Systems/UI/Canvas";
-    public const string SIBLING_BEFORE = "LoadingText";
+    #region Main Menu
+
+    /// <summary>
+    /// Path to the menu container in the main menu
+    /// </summary>
+    public const string MAIN_MENU_PARENT_PATH = "Canvas/MenuContainer";
+
+    /// <summary>
+    /// Name of the sibling before the main menu button
+    /// </summary>
+    public const string MAIN_MENU_SIBLING_BEFORE = "LobbyHostSettings";
+
+    /// <summary>
+    /// Name of the menu that is the central part of the main menu
+    /// </summary>
+    public const string MAIN_MENU_CENTRAL_MENU_NAME = "MainButtons";
+
+    #endregion
+
+    #region In Game
+
+    /// <summary>
+    /// Path to the in-game canvas
+    /// </summary>
+    public const string IN_GAME_PARENT_PATH = "Systems/UI/Canvas";
+    
+    /// <summary>
+    /// Name of the sibling before the in-game UI
+    /// </summary>
+    public const string IN_GAME_SIBLING_BEFORE = "LoadingText";
+    
+    #endregion
 
     public const int ITEMS_PER_PAGE = 16;
     public const string SCRAP_ICON_NAME = "ScrapItemIcon2";
