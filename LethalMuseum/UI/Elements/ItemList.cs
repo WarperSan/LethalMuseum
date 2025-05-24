@@ -23,24 +23,15 @@ public class ItemList : MonoBehaviour
         toggle?.onValueChanged.AddListener(ToggleItem);
     }
     
-    [HideInInspector] public UnityEvent<bool>? OnActiveChanged;
+    internal UnityEvent<bool>? OnActiveChanged;
     
     internal void SetItem(Item item)
     {
-        var showIcon = item.itemIcon != null && item.itemIcon.name != Constants.SCRAP_ICON_NAME;
-        var showText = !showIcon;
-
         if (icon != null)
-        {
-            icon.enabled = showIcon;
             icon.sprite = item.itemIcon;
-        }
 
         if (text != null)
-        {
-            text.enabled = showText;
             text.text = item.itemName;
-        }
 
         if (toggle != null)
             toggle.isOn = Register.IsEnabled(item);
