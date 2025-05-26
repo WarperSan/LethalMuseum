@@ -11,7 +11,9 @@ internal class StartOfRound_Patches
     private static void ResetShip_Postfix()
     {
         Logger.Info("RESET SHIP");
-        Logger.Info(Tracker.Instance == null);
         Tracker.Instance?.ResetCollected();
     }
+    
+    [HarmonyPatch(nameof(StartOfRound.AllPlayersHaveRevivedClientRpc)), HarmonyPostfix]
+    private static void AllPlayersHaveRevivedClientRpc_Postfix(StartOfRound __instance) => Tracker.Instance?.ResetCollected();
 }
