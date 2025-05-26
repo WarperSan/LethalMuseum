@@ -124,7 +124,7 @@ public class ToggleForm : MonoBehaviour
         
         scrapsToggle?.SetIsOnWithoutNotify(isActive);
         toolsToggle?.SetIsOnWithoutNotify(isActive);
-        variantsToggle?.SetIsOnWithoutNotify(isActive);
+        //variantsToggle?.SetIsOnWithoutNotify(isActive);
         oneHandedToggle?.SetIsOnWithoutNotify(isActive);
         twoHandedToggle?.SetIsOnWithoutNotify(isActive);
         conductiveToggle?.SetIsOnWithoutNotify(isActive);
