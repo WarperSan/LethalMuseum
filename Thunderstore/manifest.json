@@ -1,0 +1,10 @@
+{
+    "name": "LethalMuseum",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/WarperSan/LethalMuseum",
+    "description": "Adds a built-in tracker for Museum%.",
+    "dependencies": [
+        "Rune580-LethalCompany_InputUtils-0.7.10",
+        "Evaisa-LethalLib-1.0.3"
+    ]
+}
