@@ -51,8 +51,12 @@
     
     <!-- Dependencies -->
     <ItemGroup>
+        <!-- HARD -->
         <PackageReference Include="Rune580.Mods.LethalCompany.InputUtils" Version="0.7.10" IncludeAssets="compile" />
         <PackageReference Include="Evaisa.LethalLib " Version="1.0.3" />
+        
+        <!-- SOFT -->
+        <PackageReference Include="AinaVT-LethalConfig" Version="1.4.6" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

@@ -11,6 +11,7 @@ namespace LethalMuseum;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
 [BepInDependency(LethalLib.Plugin.ModGUID)]
+[BepInDependency(LethalConfig.PluginInfo.Guid, BepInDependency.DependencyFlags.SoftDependency)]
 public class LethalMuseum : BaseUnityPlugin
 {
     private void Awake()
@@ -31,6 +32,7 @@ public class LethalMuseum : BaseUnityPlugin
 
     internal static GameObject? ITEMS_BOARD;
     internal static GameObject? MUSEUM_FORM;
+    internal static Texture2D? MOD_ICON;
 
     private static bool LoadAssets(string bundleName)
     {
@@ -39,6 +41,7 @@ public class LethalMuseum : BaseUnityPlugin
 
         ITEMS_BOARD = Bundle.LoadAsset<GameObject>("ItemsBoard");
         MUSEUM_FORM = Bundle.LoadAsset<GameObject>("MuseumForm");
+        MOD_ICON = Bundle.LoadAsset<Texture2D>("lm-icon");
         
         return true;
     }
@@ -63,6 +66,9 @@ public class LethalMuseum : BaseUnityPlugin
     {
         CustomInputActions.Actions = new CustomInputActions();
         ModdedItemIdentifier.LoadModdedItems();
+        
+        if (Dependencies.LethalConfig.ConfigToUI.Enabled)
+            Dependencies.LethalConfig.ConfigToUI.AddConfigs(Configuration);
     }
 
     #endregion
