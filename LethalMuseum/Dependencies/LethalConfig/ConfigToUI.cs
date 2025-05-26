@@ -26,7 +26,7 @@ internal static class ConfigToUI
             LethalConfigManager.SetModIcon(sprite);
         }
         
-        LethalConfigManager.SetModDescription("Adds a built-in tracker for speedrunners of Museum%.");
+        LethalConfigManager.SetModDescription("Adds a built-in tracker for Museum%.");
         
         LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(config.AllowBaby, new BoolCheckBoxOptions
         {
