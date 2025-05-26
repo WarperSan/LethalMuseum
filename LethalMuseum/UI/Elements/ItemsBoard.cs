@@ -119,7 +119,7 @@ public class ItemsBoard : MonoBehaviour
 
     #region Pages
 
-    private int pageIndex;
+    private int pageIndex = 1;
     private event Action<string>? OnItemUpdated; 
     
     private void OnPageMove(bool scrollLeft)
@@ -134,9 +134,9 @@ public class ItemsBoard : MonoBehaviour
 
         var maxPageCount = Register.GetPageCount(Constants.ITEMS_PER_PAGE);
 
-        if (pageIndex < 0)
+        if (pageIndex < 1)
         {
-            pageIndex = 0;
+            pageIndex = 1;
             Helpers.Audio.PlayUI(GameNetworkManager.Instance?.buttonCancelSFX);
         }
         else if (pageIndex > maxPageCount)
@@ -153,10 +153,10 @@ public class ItemsBoard : MonoBehaviour
 
     private void UpdatePage()
     {
-        pageText?.SetText((pageIndex + 1).ToString());
+        pageText?.SetText(pageIndex.ToString());
 
         if (leftPageIcon != null)
-            leftPageIcon.enabled = pageIndex > 0;
+            leftPageIcon.enabled = pageIndex > 1;
 
         if (rightPageIcon != null)
             rightPageIcon.enabled = pageIndex < Register.GetPageCount(Constants.ITEMS_PER_PAGE);
@@ -171,7 +171,7 @@ public class ItemsBoard : MonoBehaviour
                 Destroy(child.gameObject);
             }
 
-            var items = Register.GetPage(pageIndex, Constants.ITEMS_PER_PAGE);
+            var items = Register.GetPage(pageIndex - 1, Constants.ITEMS_PER_PAGE);
             
             foreach (var item in items)
             {

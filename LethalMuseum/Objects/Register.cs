@@ -197,7 +197,7 @@ internal static class Register
         var totalItemCount = GetRegisteredCount();
         var pageCount = (float)totalItemCount / pageSize;
 
-        return UnityEngine.Mathf.FloorToInt(pageCount);
+        return UnityEngine.Mathf.CeilToInt(pageCount);
     }
 
     #endregion
