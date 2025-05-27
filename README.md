@@ -31,9 +31,6 @@ This mod uses a vanilla method to detect when items are brought or taken. This c
 ### Loot Spoilers
 Since `RuntimeIcons` generates the icons when an item spawns and this mod can use these icons, it is easy to see which items were spawned from the board. It is advised to play at least a game with the mod, then do real runs.
 
-### Icons Self Updating
-I chose to not automatically update the icons when `RuntimeIcons` generates the icon, because it just leads to having a "Icon Loading" icon.
-
 ## Dependencies
 
 ### Hard Dependencies
@@ -42,6 +39,7 @@ I chose to not automatically update the icons when `RuntimeIcons` generates the 
 
 ### Soft Dependencies
 - [LethalConfig](https://github.com/AinaVT/LethalConfig)
+- [RuntimeIcons](https://github.com/LethalCompanyModding/RuntimeIcons)
 
 # Credits
 
