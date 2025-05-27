@@ -92,7 +92,7 @@ public class ToggleForm : MonoBehaviour
         if (newItem.TryGetComponent(out ItemList itemList))
         {
             itemList.SetItem(item);
-            itemList.OnActiveChanged?.AddListener(isActive => Register.SetItemEnable(item.ID, isActive));
+            itemList.OnActiveChanged += isActive => Register.SetItemEnable(item.ID, isActive);
         }
     }
 

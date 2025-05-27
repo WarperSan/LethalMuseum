@@ -1,8 +1,8 @@
-﻿using LethalMuseum.Objects;
+﻿using System;
+using LethalMuseum.Objects;
 using LethalMuseum.Objects.Models;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 #pragma warning disable CS0649
@@ -24,7 +24,7 @@ public class ItemList : MonoBehaviour
         toggle?.onValueChanged.AddListener(ToggleItem);
     }
     
-    internal UnityEvent<bool>? OnActiveChanged;
+    internal Action<bool>? OnActiveChanged;
     
     internal void SetItem(ItemEntry item)
     {
