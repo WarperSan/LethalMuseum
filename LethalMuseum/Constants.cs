@@ -36,5 +36,4 @@ internal static class Constants
     #endregion
 
     public const int ITEMS_PER_PAGE = 16;
-    public const string SCRAP_ICON_NAME = "ScrapItemIcon2";
 }

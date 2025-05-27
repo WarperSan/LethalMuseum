@@ -57,6 +57,9 @@
         
         <!-- SOFT -->
         <PackageReference Include="AinaVT-LethalConfig" Version="1.4.6" />
+        <Reference Include="RuntimeIcons">
+            <HintPath>..\..\..\MODS\lethal-company\profiles\LethalMuseum\BepInEx\plugins\LethalCompanyModding-RuntimeIcons\RuntimeIcons.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

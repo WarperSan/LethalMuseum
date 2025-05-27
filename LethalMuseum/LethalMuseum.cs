@@ -12,6 +12,7 @@ namespace LethalMuseum;
 [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
 [BepInDependency(LethalLib.Plugin.ModGUID)]
 [BepInDependency(LethalConfig.PluginInfo.Guid, BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(RuntimeIcons.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 public class LethalMuseum : BaseUnityPlugin
 {
     private void Awake()
@@ -55,7 +56,12 @@ public class LethalMuseum : BaseUnityPlugin
     private void Patch()
     {
         Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-        Harmony.PatchAll();
+        Harmony.PatchAll(typeof(Patches.MenuManager_Patches));
+        Harmony.PatchAll(typeof(Patches.PlayerControllerB_Patches));
+        Harmony.PatchAll(typeof(Patches.StartOfRound_Patches));
+        
+        if (Dependencies.RuntimeIcons.Dependency.Enabled)
+            Harmony.PatchAll(typeof(Dependencies.RuntimeIcons.HudUtils_Patches));
     }
 
     #endregion

@@ -31,15 +31,25 @@ public class ItemsBoard : MonoBehaviour
     #endregion
 
     #region Unity
+    
+    internal static ItemsBoard? Instance; 
 
     private void Start()
     {
         Subscribe();
         UpdatePage();
         UpdateInformation();
+
+        Instance = this;
     }
 
-    private void OnDestroy() => UnSubscribe();
+    private void OnDestroy()
+    {
+        UnSubscribe();
+
+        if (Instance == this)
+            Instance = null;
+    }
 
     #endregion
 
@@ -150,6 +160,8 @@ public class ItemsBoard : MonoBehaviour
             }
         }
     }
+
+    public void UpdateItem(string id) => OnItemUpdated?.Invoke(id);
     
     #endregion
 
@@ -211,13 +223,13 @@ public class ItemsBoard : MonoBehaviour
 
     private void OnCollected(string id)
     {
-        OnItemUpdated?.Invoke(id);
+        UpdateItem(id);
         UpdateInformation();
     }
 
     private void OnDiscarded(string id)
     {
-        OnItemUpdated?.Invoke(id);
+        UpdateItem(id);
         UpdateInformation();
     }
     

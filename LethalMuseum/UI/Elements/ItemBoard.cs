@@ -23,16 +23,6 @@ public class ItemBoard : MonoBehaviour
     internal void SetItem(ItemEntry item)
     {
         shownItem = item;
-
-        var showIcon = item.Icon != null && item.Icon.name != Constants.SCRAP_ICON_NAME;
-        var showText = !showIcon;
-
-        if (icon != null)
-            icon.enabled = showIcon;
-
-        if (text != null)
-            text.enabled = showText;
-        
         UpdateSelf();
     }
 
@@ -50,12 +40,45 @@ public class ItemBoard : MonoBehaviour
             return;
 
         if (icon != null)
-            icon.sprite = shownItem.Value.Icon;
+        {
+            icon.enabled = IsIconEnabled(shownItem.Value);
+            icon.sprite = shownItem.Value.Item.itemIcon;
+        }
 
         if (text != null)
+        {
+            text.enabled = IsTextEnabled(shownItem.Value);
             text.text = shownItem.Value.Name;
+        }
 
         if (collectedBackground != null)
             collectedBackground.enabled = Tracker.Instance?.IsCollected(shownItem.Value.ID) ?? false;
+    }
+
+    private static bool IsIconEnabled(ItemEntry item)
+    {
+        var icon = item.Icon;
+        
+        if (icon == null)
+            return false;
+        
+        if (icon.name == "ScrapItemIcon2")
+            return false;
+
+        if (Dependencies.RuntimeIcons.Dependency.Enabled && !Dependencies.RuntimeIcons.Dependency.HasIconLoaded(icon))
+            return false;
+
+        return true;
+    }
+    
+    private static bool IsTextEnabled(ItemEntry item)
+    {
+        if (item.Icon == null)
+            return true;
+
+        if (item.Icon.name == "ScrapItemIcon2")
+            return true;
+
+        return false;
     }
 }
