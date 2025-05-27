@@ -1,4 +1,5 @@
 ﻿using LethalMuseum.Objects;
+using LethalMuseum.Objects.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,15 +18,13 @@ public class ItemBoard : MonoBehaviour
 
     #endregion
 
-    private string? targetId;
-    private Item? shownItem;
+    private ItemEntry? shownItem;
 
-    internal void SetItem(Item item)
+    internal void SetItem(ItemEntry item)
     {
-        targetId = Identifier.GetID(item);
         shownItem = item;
 
-        var showIcon = item.itemIcon != null && item.itemIcon.name != Constants.SCRAP_ICON_NAME;
+        var showIcon = item.Icon != null && item.Icon.name != Constants.SCRAP_ICON_NAME;
         var showText = !showIcon;
 
         if (icon != null)
@@ -39,7 +38,7 @@ public class ItemBoard : MonoBehaviour
 
     internal void OnItemUpdate(string id)
     {
-        if (targetId != id)
+        if (!shownItem.HasValue || shownItem.Value.ID != id)
             return;
         
         UpdateSelf();
@@ -47,19 +46,16 @@ public class ItemBoard : MonoBehaviour
     
     private void UpdateSelf()
     {
-        if (shownItem is null)
-        {
-            Helpers.Logger.Debug($"Item '{targetId ?? "null"}' is null.");
+        if (!shownItem.HasValue)
             return;
-        }
 
         if (icon != null)
-            icon.sprite = shownItem.itemIcon;
+            icon.sprite = shownItem.Value.Icon;
 
         if (text != null)
-            text.text = shownItem.itemName ?? "Scrap";
+            text.text = shownItem.Value.Name;
 
-        if (Tracker.Instance != null && collectedBackground != null)
-            collectedBackground.enabled = Tracker.Instance.IsCollected(shownItem);
+        if (collectedBackground != null)
+            collectedBackground.enabled = Tracker.Instance?.IsCollected(shownItem.Value.ID) ?? false;
     }
 }

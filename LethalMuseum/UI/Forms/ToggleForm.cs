@@ -1,4 +1,5 @@
 ﻿using LethalMuseum.Objects;
+using LethalMuseum.Objects.Models;
 using LethalMuseum.UI.Elements;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,7 +80,7 @@ public class ToggleForm : MonoBehaviour
 
     #region Items
 
-    private void AddItem(Item item)
+    private void AddItem(ItemEntry item)
     {
         if (itemListContainer == null || itemPrefab == null)
             return;
@@ -89,11 +90,11 @@ public class ToggleForm : MonoBehaviour
         if (newItem.TryGetComponent(out ItemList itemList))
         {
             itemList.SetItem(item);
-            itemList.OnActiveChanged?.AddListener(isActive => Register.SetItemEnable(item, isActive));
+            itemList.OnActiveChanged?.AddListener(isActive => Register.SetItemEnable(item.ID, isActive));
         }
     }
 
-    private void SetItems(Item[] items)
+    private void SetItems(ItemEntry[] items)
     {
         if (itemListContainer == null)
             return;
@@ -124,7 +125,7 @@ public class ToggleForm : MonoBehaviour
         
         scrapsToggle?.SetIsOnWithoutNotify(isActive);
         toolsToggle?.SetIsOnWithoutNotify(isActive);
-        //variantsToggle?.SetIsOnWithoutNotify(isActive);
+        variantsToggle?.SetIsOnWithoutNotify(isActive);
         oneHandedToggle?.SetIsOnWithoutNotify(isActive);
         twoHandedToggle?.SetIsOnWithoutNotify(isActive);
         conductiveToggle?.SetIsOnWithoutNotify(isActive);
@@ -133,42 +134,43 @@ public class ToggleForm : MonoBehaviour
 
     private void onScrapsToggled(bool isActive)
     {
-        Register.ApplyFilter(item => item.isScrap, isActive);
+        Register.ApplyFilter(item => item.Item.isScrap, isActive);
         UpdateAllItems();
     }
     
     private void onToolsToggled(bool isActive)
     {
-        Register.ApplyFilter(item => !item.isScrap, isActive);
+        Register.ApplyFilter(item => !item.Item.isScrap, isActive);
         UpdateAllItems();
     }
     
     private void onVariantsToggled(bool isActive)
     {
-        
+        Register.ApplyFilter(item => item.IsVariant, isActive);
+        UpdateAllItems();
     }
     
     private void onOneHandedToggled(bool isActive)
     {
-        Register.ApplyFilter(item => !item.twoHanded, isActive);
+        Register.ApplyFilter(item => !item.Item.twoHanded, isActive);
         UpdateAllItems();
     }
     
     private void onTwoHandedToggled(bool isActive)
     {
-        Register.ApplyFilter(item => item.twoHanded, isActive);
+        Register.ApplyFilter(item => item.Item.twoHanded, isActive);
         UpdateAllItems();
     }
     
     private void onConductiveToggled(bool isActive)
     {
-        Register.ApplyFilter(item => item.isConductiveMetal, isActive);
+        Register.ApplyFilter(item => item.Item.isConductiveMetal, isActive);
         UpdateAllItems();
     }
     
     private void onBatteryToggled(bool isActive)
     {
-        Register.ApplyFilter(item => item.requiresBattery, isActive);
+        Register.ApplyFilter(item => item.Item.requiresBattery, isActive);
         UpdateAllItems();
     }
 

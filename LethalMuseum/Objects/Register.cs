@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LethalMuseum.Helpers;
+using LethalMuseum.Objects.Models;
 
 namespace LethalMuseum.Objects;
 
@@ -8,42 +9,28 @@ namespace LethalMuseum.Objects;
 /// </summary>
 internal static class Register
 {
-    private static readonly SortedDictionary<string, Item> itemsData = [];
+    private static readonly SortedDictionary<string, ItemEntry> itemsData = [];
 
     /// <summary>
     /// Registers the given item
     /// </summary>
     public static void RegisterItem(Item item, bool registerAsEnabled = true)
     {
-        if (!IsItemAllowed(item))
+        if (!Identifier.IsItemAllowed(item))
             return;
-        
-        var id = Identifier.GetID(item);
 
-        if (!itemsData.TryAdd(id, item))
+        var entries = Identifier.GetAllEntries(item);
+
+        foreach (var entry in entries)
         {
-            Logger.Debug($"An item has already been registered under the value '{id}'.");
-            return;
+            if (!itemsData.TryAdd(entry.ID, entry))
+            {
+                Logger.Debug($"An item has already been registered under the value '{entry.ID}'.");
+                continue;
+            }
+            
+            SetItemEnable(entry.ID, registerAsEnabled);
         }
-
-        SetItemEnable(item, registerAsEnabled);
-    }
-
-    /// <summary>
-    /// Checks if the given item is allowed at all
-    /// </summary>
-    private static bool IsItemAllowed(Item item)
-    {
-        if (item.lockedInDemo)
-            return false;
-        
-        if (item.spawnPrefab == null)
-            return false;
-
-        if (item.itemName == "Maneater")
-            return LethalMuseum.Configuration?.AllowBaby.Value ?? false;
-
-        return true;
     }
 
     #region Status
@@ -52,14 +39,9 @@ internal static class Register
     private const char SEPARATION_CHARACTER = '|';
 
     /// <summary>
-    /// Sets the status of the given item
-    /// </summary>
-    public static void SetItemEnable(Item item, bool isEnabled) => SetItemEnable(Identifier.GetID(item), isEnabled);
-    
-    /// <summary>
     /// Sets the status of the item with the given ID
     /// </summary>
-    private static void SetItemEnable(string id, bool isEnabled)
+    public static void SetItemEnable(string id, bool isEnabled)
     {
         if (isEnabled)
             disabledItems.Remove(id);
@@ -70,7 +52,7 @@ internal static class Register
     /// <summary>
     /// Sets the status of the items that matches the given condition
     /// </summary>
-    public static void ApplyFilter(System.Func<Item, bool> condition, bool isEnabled)
+    public static void ApplyFilter(System.Func<ItemEntry, bool> condition, bool isEnabled)
     {
         foreach (var (id, item) in itemsData)
         {
@@ -80,21 +62,11 @@ internal static class Register
             SetItemEnable(id, isEnabled);
         }
     }
-    
-    /// <summary>
-    /// Checks if the specific given item is enabled
-    /// </summary>
-    public static bool IsEnabled(GrabbableObject item) => IsEnabled(item.itemProperties);
-    
-    /// <summary>
-    /// Checks if the given item is enabled
-    /// </summary>
-    public static bool IsEnabled(Item item) => IsEnabled(Identifier.GetID(item));
 
     /// <summary>
     /// Checks if the item with the given ID is enabled
     /// </summary>
-    private static bool IsEnabled(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
+    public static bool IsEnabled(string id) => itemsData.ContainsKey(id) && !disabledItems.Contains(id);
 
     /// <summary>
     /// Converts the disabled items to a single value
@@ -146,9 +118,9 @@ internal static class Register
     /// Fetches all the items registered
     /// </summary>
     /// <returns></returns>
-    public static Item[] GetAll()
+    public static ItemEntry[] GetAll()
     {
-        var items = new Item[itemsData.Count];
+        var items = new ItemEntry[itemsData.Count];
 
         int index = 0;
 
@@ -164,10 +136,10 @@ internal static class Register
     /// <summary>
     /// Fetches the items to display on the given page
     /// </summary>
-    public static Item[] GetPage(int index, int pageSize)
+    public static ItemEntry[] GetPage(int index, int pageSize)
     {
         var offset = pageSize * index;
-        var items = new List<Item>();
+        var items = new List<ItemEntry>();
 
         foreach (var (id, item) in itemsData)
         {

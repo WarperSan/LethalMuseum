@@ -1,4 +1,5 @@
 ﻿using LethalMuseum.Objects;
+using LethalMuseum.Objects.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,16 +26,16 @@ public class ItemList : MonoBehaviour
     
     internal UnityEvent<bool>? OnActiveChanged;
     
-    internal void SetItem(Item item)
+    internal void SetItem(ItemEntry item)
     {
         if (icon != null)
-            icon.sprite = item.itemIcon;
+            icon.sprite = item.Icon;
 
         if (text != null)
-            text.text = item.itemName;
+            text.text = item.Name;
 
         if (toggle != null)
-            toggle.isOn = Register.IsEnabled(item);
+            toggle.isOn = Register.IsEnabled(item.ID);
     }
     
     private void ToggleItem(bool isActive)

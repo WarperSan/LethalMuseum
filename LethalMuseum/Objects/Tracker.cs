@@ -37,20 +37,21 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Collect(GrabbableObject? item)
     {
-        if (item == null || !Register.IsEnabled(item))
+        if (item is null)
             return;
 
-        var id = Identifier.GetID(item);
+        var entries = Identifier.GetEntries(item);
 
-        // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
-        if (itemsCollected.ContainsKey(id))
+        foreach (var entry in entries)
         {
-            itemsCollected[id]++;
-            return;
-        }
+            if (!itemsCollected.TryAdd(entry.ID, 1))
+            {
+                itemsCollected[entry.ID]++;
+                continue;
+            }
 
-        itemsCollected.Add(id, 1);
-        OnCollected?.Invoke(id);
+            OnCollected?.Invoke(entry.ID);
+        }
     }
 
     /// <summary>
@@ -58,25 +59,27 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void Discard(GrabbableObject? item)
     {
-        if (item == null || !Register.IsEnabled(item))
+        if (item is null)
             return;
 
-        var id = Identifier.GetID(item);
+        var entries = Identifier.GetEntries(item);
 
-        // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
-        if (!itemsCollected.ContainsKey(id))
-            return;
-
-        var amount = itemsCollected[id] - 1;
-
-        if (amount > 0)
+        foreach (var entry in entries)
         {
-            itemsCollected[id] = amount;
-            return;
-        }
+            if (!itemsCollected.TryGetValue(entry.ID, out var amount))
+                continue;
+
+            amount--;
+
+            if (amount > 0)
+            {
+                itemsCollected[entry.ID] = amount;
+                return;
+            }
         
-        itemsCollected.Remove(id);
-        OnDiscarded?.Invoke(id);
+            itemsCollected.Remove(entry.ID);
+            OnDiscarded?.Invoke(entry.ID);
+        }
     }
 
     /// <summary>
@@ -124,11 +127,7 @@ public class Tracker : MonoBehaviour
     /// <summary>
     /// Checks if the given item is collected
     /// </summary>
-    public bool IsCollected(Item item)
-    {
-        var id = Identifier.GetID(item);
-        return itemsCollected.ContainsKey(id);
-    }
+    public bool IsCollected(string id) => itemsCollected.ContainsKey(id);
 
     #endregion
 }
