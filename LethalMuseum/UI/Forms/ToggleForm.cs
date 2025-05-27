@@ -50,8 +50,6 @@ public class ToggleForm : MonoBehaviour
         twoHandedToggle?.onValueChanged.AddListener(onTwoHandedToggled);
         conductiveToggle?.onValueChanged.AddListener(onConductiveToggled);
         batteryToggle?.onValueChanged.AddListener(onBatteryToggled);
-
-        UpdateAllItems();
     }
     
     #region Animations
@@ -61,6 +59,8 @@ public class ToggleForm : MonoBehaviour
 
     private void OpenForm()
     {
+        UpdateAllItems();
+
         animator?.SetTrigger(OpenMenu);
     }
 
