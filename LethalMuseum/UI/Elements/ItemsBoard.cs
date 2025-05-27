@@ -3,6 +3,7 @@ using LethalMuseum.Dependencies.InputUtils;
 using LethalMuseum.Objects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace LethalMuseum.UI.Elements;
@@ -33,50 +34,12 @@ public class ItemsBoard : MonoBehaviour
 
     private void Start()
     {
-        if (CustomInputActions.Actions != null)
-        {
-            if (CustomInputActions.Actions.ToggleVisibilityKey != null)
-                CustomInputActions.Actions.ToggleVisibilityKey.performed += _ => OnToggle(!gameObject.activeSelf);
-
-            if (CustomInputActions.Actions.PageLeftKey != null)
-                CustomInputActions.Actions.PageLeftKey.performed += _ => OnPageMove(true);
-
-            if (CustomInputActions.Actions.PageRightKey != null)
-                CustomInputActions.Actions.PageRightKey.performed += _ => OnPageMove(false);
-        }
-
-        if (Tracker.Instance != null)
-        {
-            Tracker.Instance.OnCollected += OnCollected;
-            Tracker.Instance.OnDiscarded += OnDiscarded;
-        }
-        
+        Subscribe();
         UpdatePage();
         UpdateInformation();
     }
 
-    private void OnToggle(bool isActive)
-    {
-        gameObject.SetActive(isActive);
-        
-        Helpers.Audio.PlayUI(
-            isActive
-                ? GameNetworkManager.Instance?.buttonPressSFX
-                : GameNetworkManager.Instance?.buttonCancelSFX
-        );
-    }
-
-    private void OnCollected(string id)
-    {
-        OnItemUpdated?.Invoke(id);
-        UpdateInformation();
-    }
-
-    private void OnDiscarded(string id)
-    {
-        OnItemUpdated?.Invoke(id);
-        UpdateInformation();
-    }
+    private void OnDestroy() => UnSubscribe();
 
     #endregion
 
@@ -120,8 +83,8 @@ public class ItemsBoard : MonoBehaviour
     #region Pages
 
     private int pageIndex = 1;
-    private event Action<string>? OnItemUpdated; 
-    
+    private event Action<string>? OnItemUpdated;
+
     private void OnPageMove(bool scrollLeft)
     {
         if (!gameObject.activeSelf)
@@ -188,5 +151,78 @@ public class ItemsBoard : MonoBehaviour
         }
     }
     
+    #endregion
+
+    #region Events
+
+    private void Subscribe()
+    {
+        if (CustomInputActions.Actions != null)
+        {
+            if (CustomInputActions.Actions.ToggleVisibilityKey != null)
+                CustomInputActions.Actions.ToggleVisibilityKey.performed += OnToggle;
+
+            if (CustomInputActions.Actions.PageLeftKey != null)
+                CustomInputActions.Actions.PageLeftKey.performed += MovePageLeft;
+
+            if (CustomInputActions.Actions.PageRightKey != null)
+                CustomInputActions.Actions.PageRightKey.performed += MovePageRight;
+        }
+
+        if (Tracker.Instance != null)
+        {
+            Tracker.Instance.OnCollected += OnCollected;
+            Tracker.Instance.OnDiscarded += OnDiscarded;
+        }
+    }
+
+    private void UnSubscribe()
+    {
+        if (CustomInputActions.Actions != null)
+        {
+            if (CustomInputActions.Actions.ToggleVisibilityKey != null)
+                CustomInputActions.Actions.ToggleVisibilityKey.performed -= OnToggle;
+
+            if (CustomInputActions.Actions.PageLeftKey != null)
+                CustomInputActions.Actions.PageLeftKey.performed -= MovePageLeft;
+
+            if (CustomInputActions.Actions.PageRightKey != null)
+                CustomInputActions.Actions.PageRightKey.performed -= MovePageRight;
+        }
+        
+        if (Tracker.Instance != null)
+        {
+            Tracker.Instance.OnCollected -= OnCollected;
+            Tracker.Instance.OnDiscarded -= OnDiscarded;
+        }
+    }
+    
+    private void OnToggle(InputAction.CallbackContext ctx)
+    {
+        var isActive = !gameObject.activeSelf;
+        gameObject.SetActive(isActive);
+        
+        Helpers.Audio.PlayUI(
+            isActive
+                ? GameNetworkManager.Instance?.buttonPressSFX
+                : GameNetworkManager.Instance?.buttonCancelSFX
+        );
+    }
+
+    private void OnCollected(string id)
+    {
+        OnItemUpdated?.Invoke(id);
+        UpdateInformation();
+    }
+
+    private void OnDiscarded(string id)
+    {
+        OnItemUpdated?.Invoke(id);
+        UpdateInformation();
+    }
+    
+    private void MovePageRight(InputAction.CallbackContext ctx) => OnPageMove(false);
+    private void MovePageLeft(InputAction.CallbackContext ctx) => OnPageMove(true);
+
     #endregion
 }
