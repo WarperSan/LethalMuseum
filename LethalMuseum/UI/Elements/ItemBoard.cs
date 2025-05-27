@@ -47,8 +47,11 @@ public class ItemBoard : MonoBehaviour
     
     private void UpdateSelf()
     {
-        if (shownItem == null)
+        if (shownItem is null)
+        {
+            Helpers.Logger.Debug($"Item '{targetId ?? "null"}' is null.");
             return;
+        }
 
         if (icon != null)
             icon.sprite = shownItem.itemIcon;
