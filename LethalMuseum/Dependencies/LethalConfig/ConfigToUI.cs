@@ -8,7 +8,7 @@ namespace LethalMuseum.Dependencies.LethalConfig;
 
 internal static class ConfigToUI
 {
-    public static bool Enabled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(global::LethalConfig.PluginInfo.Guid);
+    public static bool Enabled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(PluginInfo.Guid);
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void AddConfigs(Configuration? config)
