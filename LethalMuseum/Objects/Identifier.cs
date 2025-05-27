@@ -49,11 +49,11 @@ internal static class Identifier
             new(item)
         };
 
-        for (int i = 0; i < item.materialVariants.Length; i++)
-            entries.Add(new ItemEntry(item, i));
+        //for (int i = 0; i < item.materialVariants.Length; i++)
+        //    entries.Add(new ItemEntry(item, i));
         
-        for (int i = 0; i < item.meshVariants.Length; i++)
-            entries.Add(new ItemEntry(item, -1, i));
+        //for (int i = 0; i < item.meshVariants.Length; i++)
+        //    entries.Add(new ItemEntry(item, -1, i));
         
         return entries.ToArray();
     }
