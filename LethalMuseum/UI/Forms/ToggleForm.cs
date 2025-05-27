@@ -87,6 +87,8 @@ public class ToggleForm : MonoBehaviour
 
         var newItem = Instantiate(itemPrefab, itemListContainer, false);
 
+        newItem.name = item.Name;
+
         if (newItem.TryGetComponent(out ItemList itemList))
         {
             itemList.SetItem(item);

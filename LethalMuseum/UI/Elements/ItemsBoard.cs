@@ -177,6 +177,8 @@ public class ItemsBoard : MonoBehaviour
             {
                 var instance = Instantiate(itemPrefab, itemsContainer, false);
 
+                instance.name = item.Name;
+
                 if (instance.TryGetComponent(out ItemBoard itemBoard))
                 {
                     itemBoard.SetItem(item);
