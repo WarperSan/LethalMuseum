@@ -84,9 +84,6 @@ internal class MenuManager_Patches
             
             Objects.Register.RegisterItem(item);
         }
-        
-        if (LethalMuseum.Configuration != null)
-            Objects.Register.ApplyBlacklist(LethalMuseum.Configuration.Blacklist.Value);
 
         hasInitializedItems = true;
     }

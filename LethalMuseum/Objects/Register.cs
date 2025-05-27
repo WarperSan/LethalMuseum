@@ -29,7 +29,8 @@ internal static class Register
                 continue;
             }
             
-            SetItemEnable(entry.ID, registerAsEnabled);
+            if (!disabledItems.Contains(entry.ID))
+                SetItemEnable(entry.ID, registerAsEnabled);
         }
     }
 

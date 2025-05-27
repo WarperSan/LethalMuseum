@@ -80,6 +80,13 @@ public class LethalMuseum : BaseUnityPlugin
     private static void LoadConfiguration(ConfigFile file)
     {
         Configuration = new Configuration(file);
+
+        Configuration.Blacklist.SettingChanged += (_, _) =>
+        {
+            Objects.Register.ApplyBlacklist(Configuration.Blacklist.Value);
+        };
+        
+        Objects.Register.ApplyBlacklist(Configuration.Blacklist.Value);
     }
 
     #endregion
