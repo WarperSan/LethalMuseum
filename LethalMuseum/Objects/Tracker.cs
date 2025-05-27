@@ -87,20 +87,22 @@ public class Tracker : MonoBehaviour
     /// </summary>
     public void ResetCollected()
     {
-        var count = itemsCollected.Count;
-        
-        if (count <= 0)
-            return;
+        if (itemsCollected.Count > 0)
+        {
+            var ids = new string[itemsCollected.Count];
+            var index = 0;
 
-        var ids = new List<string>();
+            foreach (var (id, _) in itemsCollected)
+            {
+                ids[index] = id;
+                index++;
+            }
 
-        foreach (var (id, _) in itemsCollected)
-            ids.Add(id);
-
-        itemsCollected.Clear();
-        
-        foreach (var id in ids)
-            OnDiscarded?.Invoke(id);
+            itemsCollected.Clear();
+            
+            foreach (var id in ids)
+                OnDiscarded?.Invoke(id);
+        }
         
         var items = FindObjectsOfType<GrabbableObject>();
 
