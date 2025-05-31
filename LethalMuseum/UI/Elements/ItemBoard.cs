@@ -55,21 +55,7 @@ public class ItemBoard : MonoBehaviour
             collectedBackground.enabled = Tracker.Instance?.IsCollected(shownItem.Value.ID) ?? false;
     }
 
-    private static bool IsIconEnabled(ItemEntry item)
-    {
-        var icon = item.Icon;
-        
-        if (icon == null)
-            return false;
-        
-        if (icon.name == "ScrapItemIcon2")
-            return false;
-
-        if (Dependencies.RuntimeIcons.Dependency.Enabled && !Dependencies.RuntimeIcons.Dependency.HasIconLoaded(icon))
-            return false;
-
-        return true;
-    }
+    private static bool IsIconEnabled(ItemEntry item) => item.HasCustomIcon;
     
     private static bool IsTextEnabled(ItemEntry item)
     {

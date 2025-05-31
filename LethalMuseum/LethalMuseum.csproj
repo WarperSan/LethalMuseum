@@ -47,6 +47,8 @@
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all"/>
         <PackageReference Include="LethalCompany.GameLibs.Steam" Version="*-*" PrivateAssets="all"/>
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all"/>
+
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
     </ItemGroup>
     
     <!-- Dependencies -->
@@ -57,9 +59,7 @@
         
         <!-- SOFT -->
         <PackageReference Include="AinaVT-LethalConfig" Version="1.4.6" />
-        <Reference Include="RuntimeIcons">
-            <HintPath>..\..\..\MODS\lethal-company\profiles\LethalMuseum\BepInEx\plugins\LethalCompanyModding-RuntimeIcons\RuntimeIcons.dll</HintPath>
-        </Reference>
+        <Reference Include="..\..\..\MODS\lethal-company\profiles\LethalMuseum\BepInEx\plugins\LethalCompanyModding-RuntimeIcons\RuntimeIcons.dll" Publicize="true"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

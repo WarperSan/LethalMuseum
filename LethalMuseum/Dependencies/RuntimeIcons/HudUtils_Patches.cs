@@ -11,12 +11,18 @@ internal class HudUtils_Patches
     [HarmonyPatch(nameof(HudUtils.UpdateIconsInHUD)), HarmonyPostfix]
     private static void UpdateIconsInHUD_Postfix(Item item)
     {
-        if (ItemsBoard.Instance == null)
-            return;
-        
         var entries = Identifier.GetAllEntries(item);
 
         foreach (var entry in entries)
-            ItemsBoard.Instance.UpdateItem(entry.ID);
+        {
+            if (!entry.HasCustomIcon)
+                continue;
+            
+            if (PlayerControllerB_Patches.objectToClear.TryGetValue(entry.ID, out var gameObject) && gameObject != null)
+                UnityEngine.Object.Destroy(gameObject);
+            
+            PlayerControllerB_Patches.objectToClear.Remove(entry.ID);
+            ItemsBoard.Instance?.UpdateItem(entry.ID);
+        }
     }
 }

@@ -51,6 +51,11 @@ public readonly struct ItemEntry
     /// Icon of this entry
     /// </summary>
     public UnityEngine.Sprite Icon => Item.itemIcon;
+
+    /// <summary>
+    /// Checks if this entry has a custom icon
+    /// </summary>
+    public bool HasCustomIcon => CheckCustomIcon();
     
     /// <summary>
     /// Name of this entry
@@ -62,5 +67,21 @@ public readonly struct ItemEntry
         var originalName = Item.itemName ?? "Scrap";
         
         return IsVariant ? originalName + " (Variant)" : originalName;
+    }
+
+    private bool CheckCustomIcon()
+    {
+        var icon = Icon;
+        
+        if (icon == null)
+            return false;
+        
+        if (icon.name == "ScrapItemIcon2")
+            return false;
+
+        if (Dependencies.RuntimeIcons.Dependency.Enabled && !Dependencies.RuntimeIcons.Dependency.HasIconLoaded(icon))
+            return false;
+
+        return true;
     }
 }
