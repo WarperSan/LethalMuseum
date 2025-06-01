@@ -90,6 +90,11 @@ public readonly struct ItemEntry
     /// </summary>
     public string Name => GetName();
 
+    /// <summary>
+    /// Checks if this entry is about a modded item
+    /// </summary>
+    public bool IsModded => Identifier.IsItemModded(Item);
+
     private UnityEngine.Sprite GetIcon()
     {
         if (!IsVariant)
@@ -107,7 +112,7 @@ public readonly struct ItemEntry
 
     private string GetName()
     {
-        if (IsBase)
+        if (HasCustomIcon && IsBase)
             return "Any";
         
         var originalName = Item.itemName ?? "Scrap";

@@ -1,4 +1,6 @@
-﻿namespace LethalMuseum;
+﻿using UnityEngine;
+
+namespace LethalMuseum;
 
 internal static class Constants
 {

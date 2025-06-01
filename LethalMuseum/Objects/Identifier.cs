@@ -21,6 +21,11 @@ internal static class Identifier
         
         return $"Vanilla/{item.itemName}";
     }
+
+    /// <summary>
+    /// Checks if the given item is modded or not
+    /// </summary>
+    public static bool IsItemModded(Item item) => ModdedItemIdentifier.IsItemModded(item);
     
     /// <summary>
     /// Checks if the given item is allowed to be registered

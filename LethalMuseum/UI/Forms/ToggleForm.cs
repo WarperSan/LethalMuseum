@@ -21,11 +21,14 @@ public class ToggleForm : MonoBehaviour
     [SerializeField] private Toggle? allToggle;
     [SerializeField] private Toggle? scrapsToggle;
     [SerializeField] private Toggle? toolsToggle;
+    [SerializeField] private Toggle? basesToggle;
     [SerializeField] private Toggle? variantsToggle;
     [SerializeField] private Toggle? oneHandedToggle;
     [SerializeField] private Toggle? twoHandedToggle;
     [SerializeField] private Toggle? conductiveToggle;
     [SerializeField] private Toggle? batteryToggle;
+    [SerializeField] private Toggle? vanillaToggle;
+    [SerializeField] private Toggle? moddedToggle;
 
     [Header("Buttons")]
     [SerializeField] private Button? openBtn;
@@ -44,13 +47,16 @@ public class ToggleForm : MonoBehaviour
         closeBtn?.onClick.AddListener(menuManager.PlayCancelSFX);
         
         allToggle?.onValueChanged.AddListener(onAllToggled);
-        scrapsToggle?.onValueChanged.AddListener(onScrapsToggled);
-        toolsToggle?.onValueChanged.AddListener(onToolsToggled);
-        variantsToggle?.onValueChanged.AddListener(onVariantsToggled);
-        oneHandedToggle?.onValueChanged.AddListener(onOneHandedToggled);
-        twoHandedToggle?.onValueChanged.AddListener(onTwoHandedToggled);
-        conductiveToggle?.onValueChanged.AddListener(onConductiveToggled);
-        batteryToggle?.onValueChanged.AddListener(onBatteryToggled);
+        AddToggle(scrapsToggle, item => item.Item.isScrap);
+        AddToggle(toolsToggle, item => !item.Item.isScrap);
+        AddToggle(basesToggle, item => item.IsBase);
+        AddToggle(variantsToggle, item => item.IsVariant);
+        AddToggle(oneHandedToggle, item => !item.Item.twoHanded);
+        AddToggle(twoHandedToggle, item => item.Item.twoHanded);
+        AddToggle(conductiveToggle, item => item.Item.isConductiveMetal);
+        AddToggle(batteryToggle, item => item.Item.requiresBattery);
+        AddToggle(vanillaToggle, item => !item.IsModded);
+        AddToggle(moddedToggle, item => item.IsModded);
     }
     
     #region Animations
@@ -120,60 +126,36 @@ public class ToggleForm : MonoBehaviour
 
     #region Toggles
 
+    private void AddToggle(Toggle? toggle, System.Func<ItemEntry, bool> condition)
+    {
+        toggle?.onValueChanged.AddListener(isActive =>
+        {
+            Register.ApplyFilter(condition, isActive);
+            UpdateAllItems();
+        });
+    }
+
     private void onAllToggled(bool isActive)
     {
         Register.ApplyFilter(_ => true, isActive);
         UpdateAllItems();
-        
-        scrapsToggle?.SetIsOnWithoutNotify(isActive);
-        toolsToggle?.SetIsOnWithoutNotify(isActive);
-        variantsToggle?.SetIsOnWithoutNotify(isActive);
-        oneHandedToggle?.SetIsOnWithoutNotify(isActive);
-        twoHandedToggle?.SetIsOnWithoutNotify(isActive);
-        conductiveToggle?.SetIsOnWithoutNotify(isActive);
-        batteryToggle?.SetIsOnWithoutNotify(isActive);
-    }
 
-    private void onScrapsToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => item.Item.isScrap, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onToolsToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => !item.Item.isScrap, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onVariantsToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => item.IsVariant, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onOneHandedToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => !item.Item.twoHanded, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onTwoHandedToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => item.Item.twoHanded, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onConductiveToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => item.Item.isConductiveMetal, isActive);
-        UpdateAllItems();
-    }
-    
-    private void onBatteryToggled(bool isActive)
-    {
-        Register.ApplyFilter(item => item.Item.requiresBattery, isActive);
-        UpdateAllItems();
+        var toggles = new[]
+        {
+            scrapsToggle,
+            toolsToggle,
+            basesToggle,
+            variantsToggle,
+            oneHandedToggle,
+            twoHandedToggle,
+            conductiveToggle,
+            batteryToggle,
+            vanillaToggle,
+            moddedToggle
+        };
+
+        foreach (var toggle in toggles)
+            toggle?.SetIsOnWithoutNotify(isActive);
     }
 
     #endregion

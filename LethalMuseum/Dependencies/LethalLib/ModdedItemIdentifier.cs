@@ -29,4 +29,9 @@ internal static class ModdedItemIdentifier
 
         return string.IsNullOrEmpty(moddedID);
     }
+
+    /// <summary>
+    /// Checks if the given item is modded
+    /// </summary>
+    public static bool IsItemModded(Item item) => _cachedModdedItems?.ContainsKey(item) ?? false;
 }
