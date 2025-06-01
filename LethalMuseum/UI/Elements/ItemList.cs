@@ -31,10 +31,17 @@ public class ItemList : MonoBehaviour
         gameObject.name = item.ID;
 
         if (icon != null)
+        {
+            icon.enabled = item.HasCustomIcon;
             icon.sprite = item.Icon;
+            icon.color = item.IsBase ? Constants.BLACKED_COLOR : Color.white;
+        }
 
         if (text != null)
+        {
             text.text = item.Name;
+            text.enabled = !item.HasCustomIcon || item.IsBase;
+        }
 
         if (toggle != null)
             toggle.isOn = Register.IsEnabled(item.ID);

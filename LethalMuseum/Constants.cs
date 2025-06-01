@@ -36,4 +36,6 @@ internal static class Constants
     #endregion
 
     public const int ITEMS_PER_PAGE = 16;
+
+    public static Color BLACKED_COLOR = new(0.3f, 0.3f, 0.3f);
 }

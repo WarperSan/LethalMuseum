@@ -44,7 +44,7 @@ public class ItemBoard : MonoBehaviour
         {
             icon.enabled = IsIconEnabled(shownItem.Value);
             icon.sprite = shownItem.Value.Icon;
-            icon.color = shownItem.Value.IsBase ? new Color(0.3f, 0.3f, 0.3f) : Color.white;
+            icon.color = shownItem.Value.IsBase ? Constants.BLACKED_COLOR : Color.white;
         }
 
         if (text != null)
