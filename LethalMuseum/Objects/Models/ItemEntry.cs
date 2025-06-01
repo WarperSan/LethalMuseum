@@ -46,7 +46,12 @@ public readonly struct ItemEntry
     /// Is this entry a variant or not?
     /// </summary>
     public bool IsVariant => MaterialIndex != -1 || MeshIndex != -1;
-    
+
+    /// <summary>
+    /// Does this entry have any variant?
+    /// </summary>
+    public bool HasVariants => Item.materialVariants.Length > 0 || Item.meshVariants.Length > 0;
+
     /// <summary>
     /// Icon of this entry
     /// </summary>
@@ -65,8 +70,14 @@ public readonly struct ItemEntry
     private string GetName()
     {
         var originalName = Item.itemName ?? "Scrap";
-        
-        return IsVariant ? originalName + " (Variant)" : originalName;
+
+        if (IsVariant)
+            return originalName + " (Variant)";
+
+        if (HasVariants)
+            return originalName + " (Any)";
+
+        return originalName;
     }
 
     private bool CheckCustomIcon()

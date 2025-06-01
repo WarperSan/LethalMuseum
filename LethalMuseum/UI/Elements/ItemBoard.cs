@@ -55,7 +55,7 @@ public class ItemBoard : MonoBehaviour
             collectedBackground.enabled = Tracker.Instance?.IsCollected(shownItem.Value.ID) ?? false;
     }
 
-    private static bool IsIconEnabled(ItemEntry item) => item.HasCustomIcon;
+    private static bool IsIconEnabled(ItemEntry item) => item is { HasVariants: true, IsVariant: false } || item.HasCustomIcon;
 
-    private static bool IsTextEnabled(ItemEntry item) => !item.HasCustomIcon;
+    private static bool IsTextEnabled(ItemEntry item) => item is { HasVariants: true, IsVariant: false } || !item.HasCustomIcon;
 }
