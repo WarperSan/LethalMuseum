@@ -42,7 +42,7 @@ public class ItemBoard : MonoBehaviour
         if (icon != null)
         {
             icon.enabled = IsIconEnabled(shownItem.Value);
-            icon.sprite = shownItem.Value.Item.itemIcon;
+            icon.sprite = shownItem.Value.Icon;
         }
 
         if (text != null)
@@ -56,15 +56,6 @@ public class ItemBoard : MonoBehaviour
     }
 
     private static bool IsIconEnabled(ItemEntry item) => item.HasCustomIcon;
-    
-    private static bool IsTextEnabled(ItemEntry item)
-    {
-        if (item.Icon == null)
-            return true;
 
-        if (item.Icon.name == "ScrapItemIcon2")
-            return true;
-
-        return false;
-    }
+    private static bool IsTextEnabled(ItemEntry item) => !item.HasCustomIcon;
 }
