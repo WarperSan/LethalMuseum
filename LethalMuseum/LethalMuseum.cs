@@ -62,8 +62,9 @@ public class LethalMuseum : BaseUnityPlugin
 
         if (Dependencies.RuntimeIcons.Dependency.Enabled)
         {
-            Harmony.PatchAll(typeof(Dependencies.RuntimeIcons.HudUtils_Patches));
+            Harmony.PatchAll(typeof(Dependencies.RuntimeIcons.CameraQueueComponent_Patches));
             Harmony.PatchAll(typeof(Dependencies.RuntimeIcons.PlayerControllerB_Patches));
+            Harmony.PatchAll(typeof(Dependencies.RuntimeIcons.RenderingRequest_Patches));
         }
     }
 
