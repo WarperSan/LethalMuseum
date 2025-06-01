@@ -19,7 +19,7 @@ internal static class Register
         if (!Identifier.IsItemAllowed(item))
             return;
 
-        var entries = Identifier.GetAllEntries(item);
+        var entries = Identifier.GetEntries(item);
 
         foreach (var entry in entries)
         {

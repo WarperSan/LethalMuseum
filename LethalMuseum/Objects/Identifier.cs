@@ -45,7 +45,7 @@ internal static class Identifier
     /// <summary>
     /// Gets all the possible <see cref="ItemEntry"/> for the given <see cref="Item"/>
     /// </summary>
-    public static ItemEntry[] GetAllEntries(Item item)
+    public static ItemEntry[] GetEntries(Item item)
     {
         var entries = new List<ItemEntry>
         {
