@@ -5,7 +5,6 @@ using LethalMuseum.Objects.Models;
 using LethalMuseum.UI.Elements;
 using RuntimeIcons.Utils;
 using UnityEngine;
-using Logger = LethalMuseum.Helpers.Logger;
 
 namespace LethalMuseum.Dependencies.RuntimeIcons;
 
@@ -104,8 +103,6 @@ internal static class Dependency
         var newItem = Object.Instantiate(entry.Item.spawnPrefab).GetComponent<GrabbableObject>();
         newItem.enabled = false;
         newItem.gameObject.name = $"{nameof(LethalMuseum)}.processing-icon.{entry.ID}";
-        
-        Logger.Info("Enqueue: " + entry.ID);
         
         if (entry.IsVariant)
         {

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using LethalMuseum.Helpers;
 using RuntimeIcons.Components;
 
 namespace LethalMuseum.Dependencies.RuntimeIcons;
@@ -14,11 +13,5 @@ internal class CameraQueueComponent_Patches
             return;
         
         Dependency.OnRender(render.Request.GrabbableObject, render.Texture);
-    }
-
-    [HarmonyPatch(nameof(CameraQueueComponent.EnqueueObject)), HarmonyPostfix]
-    private static void Test(GrabbableObject grabbableObject, ref bool __result)
-    {
-        Logger.Info("State of the enqueue: " + grabbableObject.itemProperties.itemName + " > " + __result);
     }
 }
