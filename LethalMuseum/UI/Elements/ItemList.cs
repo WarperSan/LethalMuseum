@@ -28,6 +28,8 @@ public class ItemList : MonoBehaviour
     
     internal void SetItem(ItemEntry item)
     {
+        gameObject.name = item.ID;
+
         if (icon != null)
             icon.sprite = item.Icon;
 

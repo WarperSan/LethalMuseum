@@ -23,6 +23,7 @@ public class ItemBoard : MonoBehaviour
     internal void SetItem(ItemEntry item)
     {
         shownItem = item;
+        gameObject.name = item.ID;
         UpdateSelf();
     }
 
