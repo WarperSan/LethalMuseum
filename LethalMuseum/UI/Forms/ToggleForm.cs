@@ -30,6 +30,10 @@ public class ToggleForm : MonoBehaviour
     [SerializeField] private Toggle? vanillaToggle;
     [SerializeField] private Toggle? moddedToggle;
 
+    [Header("View")]
+    [SerializeField] private Toggle? enabledToggle;
+    [SerializeField] private Toggle? disabledToggle;
+
     [Header("Buttons")]
     [SerializeField] private Button? openBtn;
     [SerializeField] private Button? closeBtn;
@@ -57,6 +61,9 @@ public class ToggleForm : MonoBehaviour
         AddToggle(batteryToggle, item => item.Item.requiresBattery);
         AddToggle(vanillaToggle, item => !item.IsModded);
         AddToggle(moddedToggle, item => item.IsModded);
+        
+        enabledToggle?.onValueChanged.AddListener(_ => UpdateAllItems());
+        disabledToggle?.onValueChanged.AddListener(_ => UpdateAllItems());
     }
     
     #region Animations
@@ -86,6 +93,27 @@ public class ToggleForm : MonoBehaviour
 
     #region Items
 
+    private void UpdateAllItems()
+    {
+        if (itemListContainer == null)
+            return;
+
+        var items = Register.GetAll();
+        
+        foreach (Transform child in itemListContainer)
+            Destroy(child.gameObject);
+
+        noItemText?.SetActive(items.Length == 0);
+
+        foreach (var item in items)
+        {
+            if (!ShowItem(item))
+                continue;
+
+            AddItem(item);
+        }
+    }
+    
     private void AddItem(ItemEntry item)
     {
         if (itemListContainer == null || itemPrefab == null)
@@ -98,28 +126,25 @@ public class ToggleForm : MonoBehaviour
         if (newItem.TryGetComponent(out ItemList itemList))
         {
             itemList.SetItem(item);
-            itemList.OnActiveChanged += isActive => Register.SetItemEnable(item.ID, isActive);
+            itemList.OnActiveChanged += isActive =>
+            {
+                Register.SetItemEnable(item.ID, isActive);
+                UpdateAllItems();
+            };
         }
     }
 
-    private void SetItems(ItemEntry[] items)
+    private bool ShowItem(ItemEntry item)
     {
-        if (itemListContainer == null)
-            return;
-        
-        foreach (Transform child in itemListContainer)
-            Destroy(child.gameObject);
+        var isEnabled = Register.IsEnabled(item.ID);
 
-        noItemText?.SetActive(items.Length == 0);
+        if (enabledToggle != null && isEnabled)
+            return enabledToggle.isOn;
 
-        foreach (var item in items)
-            AddItem(item);
-    }
+        if (disabledToggle != null && !isEnabled)
+            return disabledToggle.isOn;
 
-    private void UpdateAllItems()
-    {
-        var loadedItems = Register.GetAll();
-        SetItems(loadedItems);
+        return true;
     }
     
     #endregion
