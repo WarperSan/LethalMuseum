@@ -49,11 +49,11 @@ internal static class Identifier
             new(item)
         };
 
-        //for (int i = 0; i < item.materialVariants.Length; i++)
-        //    entries.Add(new ItemEntry(item, i));
+        for (int i = 0; i < item.materialVariants.Length; i++)
+            entries.Add(new ItemEntry(item, i));
         
-        //for (int i = 0; i < item.meshVariants.Length; i++)
-        //    entries.Add(new ItemEntry(item, -1, i));
+        for (int i = 0; i < item.meshVariants.Length; i++)
+            entries.Add(new ItemEntry(item, -1, i));
         
         return entries.ToArray();
     }
@@ -71,7 +71,7 @@ internal static class Identifier
         var meshRenderer = item.GetComponent<MeshRenderer>();
         var meshFilter = item.GetComponent<MeshFilter>();
 
-        var materialIndex = Array.IndexOf(item.itemProperties.materialVariants, meshRenderer?.material);
+        var materialIndex = Array.IndexOf(item.itemProperties.materialVariants, meshRenderer?.sharedMaterial);
         var meshIndex = Array.IndexOf(item.itemProperties.meshVariants, meshFilter?.mesh);
 
         if (materialIndex != -1)
