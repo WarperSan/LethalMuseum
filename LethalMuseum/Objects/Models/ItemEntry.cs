@@ -18,12 +18,12 @@ public readonly struct ItemEntry
     /// <summary>
     /// Index of the material variant
     /// </summary>
-    private readonly int MaterialIndex;
+    public readonly int MaterialIndex;
     
     /// <summary>
     /// Index of the mesh variant
     /// </summary>
-    private readonly int MeshIndex;
+    public readonly int MeshIndex;
 
     internal ItemEntry(Item original, int materialIndex = -1, int meshIndex = -1)
     {
