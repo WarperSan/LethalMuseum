@@ -47,16 +47,14 @@ internal static class Identifier
     /// </summary>
     public static ItemEntry[] GetEntries(Item item)
     {
-        var entries = new List<ItemEntry>
-        {
-            new(item)
-        };
+        var baseEntry = new ItemEntry(item);
+        var entries = new List<ItemEntry> { baseEntry };
 
         for (int i = 0; i < item.materialVariants.Length; i++)
-            entries.Add(new ItemEntry(item, i));
+            entries.Add(baseEntry.Material(i));
         
         for (int i = 0; i < item.meshVariants.Length; i++)
-            entries.Add(new ItemEntry(item, -1, i));
+            entries.Add(baseEntry.Mesh(i));
         
         return entries.ToArray();
     }
@@ -66,22 +64,24 @@ internal static class Identifier
     /// </summary>
     public static ItemEntry[] GetEntries(GrabbableObject item)
     {
-        var entries = new List<ItemEntry>
+        var baseEntry = new ItemEntry(item.itemProperties);
+        var entries = new List<ItemEntry> { baseEntry };
+
+        if (item.TryGetComponent(out MeshRenderer meshRenderer))
         {
-            new(item.itemProperties)
-        };
+            var materialIndex = Array.IndexOf(item.itemProperties.materialVariants, meshRenderer.sharedMaterial);
+            
+            if (materialIndex != -1)
+                entries.Add(baseEntry.Material(materialIndex));
+        }
+        
+        if (item.TryGetComponent(out MeshFilter meshFilter))
+        {
+            var meshIndex = Array.IndexOf(item.itemProperties.meshVariants, meshFilter?.mesh);
 
-        var meshRenderer = item.GetComponent<MeshRenderer>();
-        var meshFilter = item.GetComponent<MeshFilter>();
-
-        var materialIndex = Array.IndexOf(item.itemProperties.materialVariants, meshRenderer?.sharedMaterial);
-        var meshIndex = Array.IndexOf(item.itemProperties.meshVariants, meshFilter?.mesh);
-
-        if (materialIndex != -1)
-            entries.Add(new ItemEntry(item.itemProperties, materialIndex));
-
-        if (meshIndex != -1)
-            entries.Add(new ItemEntry(item.itemProperties, -1, meshIndex));
+            if (meshIndex != -1)
+                entries.Add(baseEntry.Mesh(meshIndex));
+        }
         
         return entries.ToArray();
     }

@@ -24,12 +24,20 @@ public readonly struct ItemEntry
     /// Index of the mesh variant
     /// </summary>
     public readonly int MeshIndex;
-
-    internal ItemEntry(Item original, int materialIndex = -1, int meshIndex = -1)
+    
+    public ItemEntry(Item original)
     {
         Item = original;
+        ID = Identifier.GetID(original);
+        MaterialIndex = -1;
+        MeshIndex = -1;
+    }
+    
+    private ItemEntry(ItemEntry baseEntry, int materialIndex, int meshIndex)
+    {
+        Item = baseEntry.Item;
 
-        var id = Identifier.GetID(original);
+        var id = Identifier.GetID(baseEntry.Item);
 
         if (materialIndex != -1)
             ID = $"{id}/base/{materialIndex}";
@@ -41,6 +49,16 @@ public readonly struct ItemEntry
         MaterialIndex = materialIndex;
         MeshIndex = meshIndex;
     }
+
+    /// <summary>
+    /// Creates a mesh variant of this entry 
+    /// </summary>
+    public ItemEntry Mesh(int index) => new(this, -1, index);
+    
+    /// <summary>
+    /// Creates a material variant of this entry 
+    /// </summary>
+    public ItemEntry Material(int index) => new(this, index, -1);
 
     /// <summary>
     /// Is this entry a variant or not?
