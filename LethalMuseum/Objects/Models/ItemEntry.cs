@@ -60,7 +60,7 @@ public readonly struct ItemEntry
     /// <summary>
     /// Checks if this entry has a custom icon
     /// </summary>
-    public bool HasCustomIcon => CheckCustomIcon();
+    public bool HasCustomIcon => GetHasCustomIcon();
     
     /// <summary>
     /// Name of this entry
@@ -80,7 +80,7 @@ public readonly struct ItemEntry
         return originalName;
     }
 
-    private bool CheckCustomIcon()
+    private bool GetHasCustomIcon()
     {
         var icon = Icon;
         
