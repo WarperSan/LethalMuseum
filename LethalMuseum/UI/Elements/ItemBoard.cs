@@ -43,6 +43,7 @@ public class ItemBoard : MonoBehaviour
         {
             icon.enabled = IsIconEnabled(shownItem.Value);
             icon.sprite = shownItem.Value.Icon;
+            icon.color = shownItem.Value.IsBase ? new Color(0.3f, 0.3f, 0.3f) : Color.white;
         }
 
         if (text != null)
@@ -55,7 +56,7 @@ public class ItemBoard : MonoBehaviour
             collectedBackground.enabled = Tracker.Instance?.IsCollected(shownItem.Value.ID) ?? false;
     }
 
-    private static bool IsIconEnabled(ItemEntry item) => item is { HasVariants: true, IsVariant: false } || item.HasCustomIcon;
+    private static bool IsIconEnabled(ItemEntry item) => item.IsBase || item.HasCustomIcon;
 
-    private static bool IsTextEnabled(ItemEntry item) => item is { HasVariants: true, IsVariant: false } || !item.HasCustomIcon;
+    private static bool IsTextEnabled(ItemEntry item) => item.IsBase || !item.HasCustomIcon;
 }

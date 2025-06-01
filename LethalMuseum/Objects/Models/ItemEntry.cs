@@ -71,6 +71,11 @@ public readonly struct ItemEntry
     public bool HasVariants => Item.materialVariants.Length > 0 || Item.meshVariants.Length > 0;
 
     /// <summary>
+    /// Is this entry the base or not?
+    /// </summary>
+    public bool IsBase => HasVariants && !IsVariant;
+
+    /// <summary>
     /// Icon of this entry
     /// </summary>
     public UnityEngine.Sprite Icon => Item.itemIcon;
@@ -87,13 +92,13 @@ public readonly struct ItemEntry
 
     private string GetName()
     {
+        if (IsBase)
+            return "Any";
+        
         var originalName = Item.itemName ?? "Scrap";
 
         if (IsVariant)
             return originalName + " (Variant)";
-
-        if (HasVariants)
-            return originalName + " (Any)";
 
         return originalName;
     }
