@@ -44,6 +44,9 @@ public class Tracker : MonoBehaviour
 
         foreach (var entry in entries)
         {
+            if (!Register.IsEnabled(entry.ID))
+                continue;
+            
             if (!itemsCollected.TryAdd(entry.ID, 1))
             {
                 itemsCollected[entry.ID]++;
@@ -66,6 +69,9 @@ public class Tracker : MonoBehaviour
 
         foreach (var entry in entries)
         {
+            if (!Register.IsEnabled(entry.ID))
+                continue;
+            
             if (!itemsCollected.TryGetValue(entry.ID, out var amount))
                 continue;
 
