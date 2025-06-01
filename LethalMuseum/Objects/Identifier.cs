@@ -36,6 +36,9 @@ internal static class Identifier
         if (item.itemName == "Maneater")
             return LethalMuseum.Configuration?.AllowBaby.Value ?? false;
 
+        if (item.itemName == "Body")
+            return LethalMuseum.Configuration?.AllowBody.Value ?? false;
+
         return true;
     }
 

@@ -7,6 +7,7 @@ public class Configuration
     public readonly ConfigEntry<string> Blacklist;
 
     public readonly ConfigEntry<bool> AllowBaby;
+    public readonly ConfigEntry<bool> AllowBody;
     
     public Configuration(ConfigFile cfg)
     {
@@ -22,6 +23,13 @@ public class Configuration
             "allowBabyItem",
             false,
             "Defines if the Maneater should count as an item to collect.\n\nThis can lead to problem from the tracker, but it is a fun challenge."
+        );
+        
+        AllowBody = cfg.Bind(
+            "Items",
+            "allowBodyItem",
+            false,
+            "Defines if the body of a dead player should count as an item to collect."
         );
     }
 }
