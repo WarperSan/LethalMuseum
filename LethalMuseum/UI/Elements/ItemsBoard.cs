@@ -211,6 +211,9 @@ public class ItemsBoard : MonoBehaviour
     
     private void OnToggle(InputAction.CallbackContext ctx)
     {
+        if (Dependency.Enabled && !Dependency.AllowKeybind(ctx))
+            return;
+        
         var isActive = !gameObject.activeSelf;
         gameObject.SetActive(isActive);
         
@@ -232,9 +235,22 @@ public class ItemsBoard : MonoBehaviour
         UpdateItem(id);
         UpdateInformation();
     }
-    
-    private void MovePageRight(InputAction.CallbackContext ctx) => OnPageMove(false);
-    private void MovePageLeft(InputAction.CallbackContext ctx) => OnPageMove(true);
+
+    private void MovePageRight(InputAction.CallbackContext ctx)
+    {
+        if (Dependency.Enabled && !Dependency.AllowKeybind(ctx))
+            return;
+
+        OnPageMove(false);
+    }
+
+    private void MovePageLeft(InputAction.CallbackContext ctx)
+    {
+        if (Dependency.Enabled && !Dependency.AllowKeybind(ctx))
+            return;
+
+        OnPageMove(true);
+    }
 
     #endregion
 }
