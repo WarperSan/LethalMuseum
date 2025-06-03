@@ -39,6 +39,13 @@ internal static class ConfigToUI
             Name = "Allow Body",
             RequiresRestart = true
         }));
+        
+        LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(config.AutomaticIconGeneration, new BoolCheckBoxOptions
+        {
+            Name = "Automatic Icon Generation",
+            RequiresRestart = false
+        }));
+        
         LethalConfigManager.SkipAutoGenFor(config.Blacklist);
     }
 }

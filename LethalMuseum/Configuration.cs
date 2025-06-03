@@ -8,6 +8,8 @@ public class Configuration
 
     public readonly ConfigEntry<bool> AllowBaby;
     public readonly ConfigEntry<bool> AllowBody;
+
+    public readonly ConfigEntry<bool> AutomaticIconGeneration;
     
     public Configuration(ConfigFile cfg)
     {
@@ -30,6 +32,13 @@ public class Configuration
             "allowBodyItem",
             false,
             "Defines if the body of a dead player should count as an item to collect."
+        );
+        
+        AutomaticIconGeneration = cfg.Bind(
+            "Dependency",
+            "automaticIconGeneration",
+            true,
+            $"Defines if this mod will force {nameof(RuntimeIcons)} to automatically generate all the icons upon loading a game."
         );
     }
 }
