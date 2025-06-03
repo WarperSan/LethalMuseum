@@ -1,6 +1,6 @@
 {
     "name": "LethalMuseum",
-    "version_number": "1.0.0",
+    "version_number": "1.1.0",
     "website_url": "https://github.com/WarperSan/LethalMuseum",
     "description": "Adds a built-in tracker for Museum%.",
     "dependencies": [
