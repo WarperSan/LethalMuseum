@@ -45,8 +45,8 @@ internal static class Dependency
             sprite.name = sprite.texture.name = $"{nameof(LethalMuseum)}+{nameof(RuntimeIcons)}.{entry.ID}";
             generatedIcons.Add(entry.ID, sprite);
 
-            if (objectToClear.Remove(entry.ID, out var gameObject) && gameObject != null)
-                Object.Destroy(gameObject);
+            //if (objectToClear.Remove(entry.ID, out var gameObject) && gameObject != null)
+            //    Object.Destroy(gameObject);
             
             if (!hasDequeued.Add(entry.Item))
                 continue;
@@ -103,6 +103,7 @@ internal static class Dependency
         var newItem = Object.Instantiate(entry.Item.spawnPrefab).GetComponent<GrabbableObject>();
         newItem.enabled = false;
         newItem.gameObject.name = $"{nameof(LethalMuseum)}.processing-icon.{entry.ID}";
+        newItem.transform.position = new Vector3(0, 1_000, 0);
         
         if (entry.IsVariant)
         {
