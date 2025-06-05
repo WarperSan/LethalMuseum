@@ -2,15 +2,16 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using LethalMuseum.Dependencies.InputUtils;
-using LethalMuseum.Dependencies.LethalLib;
 using LethalMuseum.Helpers;
 using UnityEngine;
 
 namespace LethalMuseum;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+// Hard
 [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
-[BepInDependency(LethalLib.Plugin.ModGUID)]
+// Soft
+[BepInDependency(LethalLib.Plugin.ModGUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(LethalConfig.PluginInfo.Guid, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(RuntimeIcons.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 public class LethalMuseum : BaseUnityPlugin
@@ -75,7 +76,9 @@ public class LethalMuseum : BaseUnityPlugin
     private static void LoadDependencies()
     {
         CustomInputActions.Actions = new CustomInputActions();
-        ModdedItemIdentifier.LoadModdedItems();
+        
+        if (Dependencies.LethalLib.Dependency.Enabled)
+            Dependencies.LethalLib.Dependency.LoadModdedItems();
         
         if (Dependencies.LethalConfig.ConfigToUI.Enabled)
             Dependencies.LethalConfig.ConfigToUI.AddConfigs(Configuration);

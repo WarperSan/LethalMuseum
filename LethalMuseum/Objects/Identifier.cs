@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LethalMuseum.Dependencies.LethalLib;
 using LethalMuseum.Objects.Models;
 using UnityEngine;
 
@@ -16,8 +15,12 @@ internal static class Identifier
     /// </summary>
     public static string GetID(Item item)
     {
-        if (ModdedItemIdentifier.GetModdedID(item, out var moddedID) && moddedID != null)
-            return moddedID;
+        string? id;
+        
+        if (Dependencies.LethalLib.Dependency.Enabled &&
+            Dependencies.LethalLib.Dependency.GetModdedID(item, out id) &&
+            id != null)
+            return id;
         
         return $"Vanilla/{item.itemName}";
     }
@@ -25,8 +28,14 @@ internal static class Identifier
     /// <summary>
     /// Checks if the given item is modded or not
     /// </summary>
-    public static bool IsItemModded(Item item) => ModdedItemIdentifier.IsItemModded(item);
-    
+    public static bool IsItemModded(Item item)
+    {
+        if (Dependencies.LethalLib.Dependency.Enabled && Dependencies.LethalLib.Dependency.IsItemModded(item))
+            return true;
+
+        return false;
+    }
+
     /// <summary>
     /// Checks if the given item is allowed to be registered
     /// </summary>

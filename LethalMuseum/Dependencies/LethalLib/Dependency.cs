@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace LethalMuseum.Dependencies.LethalLib;
 
-internal static class ModdedItemIdentifier
+internal static class Dependency
 {
+    public static bool Enabled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(global::LethalLib.Plugin.ModGUID);
+
     private static Dictionary<Item, string>? _cachedModdedItems;
 
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void LoadModdedItems()
     {
         _cachedModdedItems = [];
@@ -23,6 +27,7 @@ internal static class ModdedItemIdentifier
     /// <summary>
     /// Fetches the ID of the given item from the cached modded items
     /// </summary>
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static bool GetModdedID(Item item, out string? moddedID)
     {
         moddedID = _cachedModdedItems?.GetValueOrDefault(item);
@@ -33,5 +38,6 @@ internal static class ModdedItemIdentifier
     /// <summary>
     /// Checks if the given item is modded
     /// </summary>
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static bool IsItemModded(Item item) => _cachedModdedItems?.ContainsKey(item) ?? false;
 }
