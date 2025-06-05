@@ -8,7 +8,7 @@ namespace LethalMuseum.Dependencies.RuntimeIcons;
 internal class RenderingRequest_Patches
 {
     [HarmonyPatch(MethodType.Constructor, [typeof(GrabbableObject), typeof(UnityEngine.Sprite)]), HarmonyPostfix]
-    private static void Test(ref CameraQueueComponent.RenderingRequest __instance)
+    private static void ctor_Postfix(ref CameraQueueComponent.RenderingRequest __instance)
     {
         var entries = Identifier.GetEntries(__instance.GrabbableObject);
 
